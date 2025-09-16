@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Srinivasan Balasubramanian</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Additional styles for projects page */
+        .project-header {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+        
+        .project-header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .project-header p {
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--light-text);
+            font-size: 1.1rem;
+        }
+        
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .filter-btn {
+            background-color: var(--light-background);
+            color: var(--text-color);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .project-item {
+            margin-bottom: 80px;
+        }
+        
+        .project-content {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .project-details {
+            flex: 1;
+        }
+        
+        .project-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .project-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .project-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .project-date {
+            color: var(--light-text);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .project-description {
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+        
+        .project-tech-stack {
+            margin-bottom: 25px;
+        }
+        
+        .project-tech-stack h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tech-tag {
+            background-color: var(--light-background);
+            color: var(--primary-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .project-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .project-link:hover {
+            color: var(--secondary-color);
+        }
+        
+        @media screen and (max-width: 992px) {
+            .project-content {
+                flex-direction: column-reverse;
+            }
+            
+            .project-image {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">SB</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="projects.html" class="active">Projects</a></li>
+                <li><a href="resume.html">Resume</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Project Header -->
+    <header class="project-header">
+        <div class="container">
+            <h1>My Projects</h1>
+            <p>Here are some of the projects I've worked on. Each project represents my skills, interests, and growth as a developer.</p>
+        </div>
+    </header>
+
+    <!-- Projects Section -->
+    <section class="projects-section">
+        <div class="container">
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="ai-ml">AI/ML</button>
+                <button class="filter-btn" data-filter="web">Web Development</button>
+                <button class="filter-btn" data-filter="mobile">Mobile Apps</button>
+            </div>
+
+            <div class="projects-container">
+                <!-- Project 1 -->
+                <div class="project-item ai-ml" id="deepfake">
+                    <div class="project-content">
+                        <div class="project-details">
+                            <h2 class="project-title">Deepfake Detection using GenAI Models</h2>
+                            <p class="project-date">May 2025</p>
+                            <div class="project-description">
+                                <p>Engineered a deep learning system to identify manipulated (deepfake) images, audio, and video using state-of-the-art GenAI models. This project addresses the growing concern of synthetic media by providing reliable detection mechanisms.</p>
+                                <p>The system features a responsive React frontend integrated with a Python backend using Flask for real-time analysis. It employs Xception and Inception-based models for media classification, achieving high accuracy in detecting various types of manipulated content.</p>
+                            </div>
+                            <div class="project-tech-stack">
+                                <h3>Technologies Used:</h3>
+                                <div class="tech-tags">
+                                    <span class="tech-tag">React</span>
+                                    <span class="tech-tag">Python</span>
+                                    <span class="tech-tag">TensorFlow</span>
+                                    <span class="tech-tag">Flask</span>
+                                    <span class="tech-tag">Deep Learning</span>
+                                </div>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" class="project-link"><i class="fab fa-github"></i> View Code</a>
+                                <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            </div>
+                        </div>
+                        <div class="project-image">
+                            <!-- Placeholder for project image -->
+                            <div style="background-color: #ddd; height: 300px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="font-size: 3rem; color: #999;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-item ai-ml" id="abalone">
+                    <div class="project-content">
+                        <div class="project-details">
+                            <h2 class="project-title">Abalone Age Prediction</h2>
+                            <p class="project-date">Feb 2024</p>
+                            <div class="project-description">
+                                <p>Built a regression pipeline to predict the age of abalone shellfish based on physical features. This project demonstrates my skills in data preprocessing, feature engineering, and machine learning model selection.</p>
+                                <p>I applied and compared multiple models including Linear Regression, Random Forest, XGBoost, and CatBoost to find the most accurate prediction method. Used RMSLE as the evaluation metric and achieved a performance score of 0.21 on test data.</p>
+                            </div>
+                            <div class="project-tech-stack">
+                                <h3>Technologies Used:</h3>
+                                <div class="tech-tags">
+                                    <span class="tech-tag">Python</span>
+                                    <span class="tech-tag">Machine Learning</span>
+                                    <span class="tech-tag">Pandas</span>
+                                    <span class="tech-tag">Scikit-learn</span>
+                                </div>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" class="project-link"><i class="fab fa-github"></i> View Code</a>
+                                <a href="#" class="project-link"><i class="fas fa-file-alt"></i> Project Report</a>
+                            </div>
+                        </div>
+                        <div class="project-image">
+                            <!-- Placeholder for project image -->
+                            <div style="background-color: #ddd; height: 300px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="font-size: 3rem; color: #999;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-item mobile" id="traffic">
+                    <div class="project-content">
+                        <div class="project-details">
+                            <h2 class="project-title">Traffic Fine Management App</h2>
+                            <p class="project-date">Sept 2023</p>
+                            <div class="project-description">
+                                <p>Designed an Android app for traffic police to issue fines on the go using real-time Firebase integration. This mobile application streamlines the process of issuing traffic violations and managing records.</p>
+                                <p>The app enables automated receipt generation, violation tracking, and provides a user-friendly fine history view. It demonstrates my ability to create practical mobile solutions for real-world problems.</p>
+                            </div>
+                            <div class="project-tech-stack">
+                                <h3>Technologies Used:</h3>
+                                <div class="tech-tags">
+                                    <span class="tech-tag">Kotlin</span>
+                                    <span class="tech-tag">Firebase</span>
+                                    <span class="tech-tag">Android Studio</span>
+                                    <span class="tech-tag">Mobile Development</span>
+                                </div>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" class="project-link"><i class="fab fa-github"></i> View Code</a>
+                                <a href="#" class="project-link"><i class="fab fa-google-play"></i> App Demo</a>
+                            </div>
+                        </div>
+                        <div class="project-image">
+                            <!-- Placeholder for project image -->
+                            <div style="background-color: #ddd; height: 300px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="font-size: 3rem; color: #999;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-item web">
+                    <div class="project-content">
+                        <div class="project-details">
+                            <h2 class="project-title">E-commerce Medicine Website</h2>
+                            <p class="project-date">Apr 2023</p>
+                            <div class="project-description">
+                                <p>Developed a full-stack medicine delivery web application with secure cart and order management. This project showcases my ability to create comprehensive e-commerce solutions with both frontend and backend components.</p>
+                                <p>The website enables product search, checkout, and dynamic pricing using JavaScript and MongoDB backend. It demonstrates my skills in creating secure, user-friendly web applications.</p>
+                            </div>
+                            <div class="project-tech-stack">
+                                <h3>Technologies Used:</h3>
+                                <div class="tech-tags">
+                                    <span class="tech-tag">HTML</span>
+                                    <span class="tech-tag">CSS</span>
+                                    <span class="tech-tag">JavaScript</span>
+                                    <span class="tech-tag">MongoDB</span>
+                                    <span class="tech-tag">Web Development</span>
+                                </div>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" class="project-link"><i class="fab fa-github"></i> View Code</a>
+                                <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            </div>
+                        </div>
+                        <div class="project-image">
+                            <!-- Placeholder for project image -->
+                            <div style="background-color: #ddd; height: 300px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="font-size: 3rem; color: #999;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Srinivasan Balasubramanian. All Rights Reserved.</p>
+                <div class="social-links">
+                    <a href="https://github.com/srini2k03" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
