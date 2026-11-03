@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------- Design tokens ---------- */
+:root {
+  color-scheme: light;
+  --bg: #f6f6f2;
+  --bg-elev: #ffffff;
+  --surface: rgba(12, 15, 20, 0.035);
+  --surface-strong: rgba(12, 15, 20, 0.06);
+  --border: rgba(12, 15, 20, 0.1);
+  --border-strong: rgba(12, 15, 20, 0.18);
+  --fg: #0c0f14;
+  --fg-soft: #2a313b;
+  --muted: #5b6573;
+  --faint: #8b94a1;
+  --accent: #0a7d52;
+  --accent-soft: rgba(10, 125, 82, 0.1);
+  --accent-ink: #ffffff;
+  --blue: #2f5bd3;
+  --amber: #a55f00;
+  --violet: #6a4fd6;
+  --rose: #c23a5c;
+  --live: #0a8f5a;
+  --pending: #a55f00;
+  --glow: rgba(10, 125, 82, 0.12);
+  --grid: rgba(12, 15, 20, 0.05);
+  /* chart roles (validated: scripts in the dataviz method, light surface #ffffff) */
+  --chart-surface: #ffffff;
+  --series-1: #0f9e6a;
+  --series-2: #e0662f;
+  --series-muted: #c9ccd1;
+  --chart-grid: #e6e7ea;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #07090c;
+  --bg-elev: #0d1117;
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-strong: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --fg: #eef1f5;
+  --fg-soft: #c9d0da;
+  --muted: #8b95a3;
+  --faint: #5d6774;
+  --accent: #5eeaa8;
+  --accent-soft: rgba(94, 234, 168, 0.1);
+  --accent-ink: #04140c;
+  --blue: #7fa6ff;
+  --amber: #ffb547;
+  --violet: #a996ff;
+  --rose: #ff7a9c;
+  --live: #5eeaa8;
+  --pending: #ffb547;
+  --glow: rgba(94, 234, 168, 0.14);
+  --grid: rgba(255, 255, 255, 0.04);
+  /* chart roles (validated against dark surface #0d1117) */
+  --chart-surface: #0d1117;
+  --series-1: #1ea372;
+  --series-2: #d96a33;
+  --series-muted: #3a414c;
+  --chart-grid: #1c222b;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-elev: var(--bg-elev);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-soft: var(--fg-soft);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-blue: var(--blue);
+  --color-amber: var(--amber);
+  --color-violet: var(--violet);
+  --color-rose: var(--rose);
+  --color-live: var(--live);
+  --color-pending: var(--pending);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+}
+
+/* ---------- Base ---------- */
+html {
+  overflow-x: hidden;
+  overflow-x: clip;
+  background: var(--bg);
+  color: var(--fg);
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Film grain overlay: adds depth to flat dark surfaces. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='1'/></svg>");
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.mask-fade-b {
+  mask-image: linear-gradient(to bottom, black 55%, transparent);
+}
+
+.mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+/* Spotlight that follows the cursor inside a card (vars set from JS). */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), var(--glow), transparent 45%);
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Gradient border that lights up on hover. */
+.ring-glow {
+  position: relative;
+}
+.ring-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), var(--accent), transparent 40%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.ring-glow:hover::after {
+  opacity: 0.7;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 48s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--live) 60%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+.flow-dash {
+  stroke-dasharray: 4 8;
+  animation: dash-flow 1.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .pulse-dot,
+  .flow-dash {
+    animation: none;
+  }
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+.text-pretty {
+  text-wrap: pretty;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chart tooltip */
+.viz-tip {
+  pointer-events: none;
+  position: absolute;
+  z-index: 10;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  color: var(--fg);
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
