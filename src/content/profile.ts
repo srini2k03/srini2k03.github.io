@@ -9,7 +9,7 @@ export const profile = {
   phoneHref: "tel:+918431358523",
   github: "https://github.com/srini2k03",
   githubHandle: "srini2k03",
-  siteRepo: "https://github.com/srini2k03/Resume-",
+  siteRepo: "https://github.com/srini2k03/srini2k03.github.io",
   headline: "I build ML systems that ship, measure themselves, and say “I don’t know” when they should.",
   summary:
     "Machine Learning Engineer (B.E. Information Science, BMS College of Engineering, 2025). " +

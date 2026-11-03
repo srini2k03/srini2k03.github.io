@@ -64,10 +64,27 @@ jobs:
           path: resume-build
       - name: Use the freshly compiled résumé
         run: cp resume-build/resume.pdf public/Srinivasan_Balasubramanian_Resume.pdf
+      # Resolved in shell: a user site's base_path is "", which `||` in an expression would treat as missing.
+      - name: Resolve base path and site URL
+        env:
+          PAGES_OUTCOME: ${{ steps.pages.outcome }}
+          PAGES_BASE: ${{ steps.pages.outputs.base_path }}
+          PAGES_URL: ${{ steps.pages.outputs.base_url }}
+          REPO: ${{ github.event.repository.name }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          if [ "$PAGES_OUTCOME" = "success" ]; then
+            base="$PAGES_BASE"; url="$PAGES_URL"
+          elif [ "$REPO" = "$OWNER.github.io" ]; then
+            base=""; url="https://$REPO"
+          else
+            base="/$REPO"; url="https://$OWNER.github.io/$REPO"
+          fi
+          echo "PAGES_BASE_PATH=$base" >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_SITE_URL=$url" >> "$GITHUB_ENV"
+          echo "base path: '$base' · site url: $url"
       - run: npm run build
         env:
-          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path || format('/{0}', github.event.repository.name) }}
-          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
           NEXT_TELEMETRY_DISABLED: 1
       - uses: actions/upload-pages-artifact@v3
         with:
