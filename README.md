@@ -1,6 +1,6 @@
 # Srinivasan Balasubramanian · ML Engineer portfolio
 
-**Live site:** https://srini2k03.github.io/Resume-/
+**Live site:** https://srini2k03.github.io/
 
 This is a portfolio for AI/ML Engineer, Junior Data Scientist and Associate Software Engineer (ML) roles. It is a typed, tested, statically exported web app. Every number on it comes from a results file committed in the matching project repository. Results that have not been measured yet are labelled as pending, never estimated.
 
