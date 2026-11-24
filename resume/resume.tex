@@ -85,7 +85,7 @@
     \item \small{
      \textbf{Languages:} Python, SQL, C++, Java, Kotlin \\
      \textbf{ML \& Deep Learning:} Scikit-Learn, XGBoost, LightGBM, CatBoost, TensorFlow/Keras, OpenCV, Optuna, SHAP \\
-     \textbf{LLMs \& GenAI:} RAG, Hugging Face Transformers, TRL (LoRA fine-tuning), Qdrant, BM25, Cross-Encoder Reranking, Ollama, llama.cpp/GGUF Quantization \\
+     \textbf{LLMs \& GenAI:} RAG, Hugging Face Transformers, TRL (LoRA), Qdrant, BM25, Cross-Encoder Reranking, Ollama, llama.cpp (GGUF) \\
      \textbf{MLOps \& Deployment:} MLflow, DVC, Prefect, Evidently, Docker, FastAPI, Flask, GitHub Actions (CI/CD), Pytest, Linux \\
      \textbf{Data \& Analytics:} pandas, NumPy, DuckDB, PostgreSQL, MySQL, MongoDB, Streamlit, A/B Testing, Statistical Inference
     }
@@ -100,7 +100,7 @@
       {Software Intern (AI/ML)}{Bangalore, India}
       \resumeItemListStart
         \resumeItem{Built Python data-processing workflows to clean and structure unstructured text corpora for LLM and ML model evaluation.}
-        \resumeItem{Designed and benchmarked baseline LLM prompts across test suites; wrote Scikit-Learn cross-validation and error-analysis scripts tracking Precision, Recall and F1.}
+        \resumeItem{Benchmarked baseline LLM prompts; wrote Scikit-Learn cross-validation and error-analysis scripts (Precision, Recall, F1).}
         \resumeItem{Integrated ML inference outputs into internal application prototypes through Flask REST APIs, working with the software team.}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
@@ -133,14 +133,14 @@
       \resumeItemListStart
         \resumeItem{Fine-tuned Qwen2.5-0.5B-Instruct with LoRA (TRL SFT, completion-only loss) to convert noisy Indian job posts (WhatsApp forwards, Hinglish) into schema-validated JSON across 11 fields, returning null instead of guessing missing values.}
         \resumeItem{Raised micro-F1 from 71.6\% (base model) to 99.3\% and cut hallucinated fields from 67\% to 1.9\% on 471 held-out synthetic posts (template-disjoint, MinHash-deduplicated splits), beating GPT-OSS-120B few-shot (97.9\%).}
-        \resumeItem{Quantized the model to 4-bit GGUF (0.40 GB, 99.0\% micro-F1) and deployed it fully in the browser (llama.cpp WebAssembly) with JSON-grammar constrained decoding.}
+        \resumeItem{Quantized to 4-bit GGUF (0.40 GB, 99.0\% F1) and served it in-browser via llama.cpp WebAssembly with JSON-grammar decoding.}
       \resumeItemListEnd
 
     \resumeProjectHeading
       {\textbf{E-Commerce Analytics, 99K Orders (Olist)} $|$ \emph{SQL, DuckDB, PostgreSQL, Streamlit}}
       {\href{https://github.com/srini2k03/olist-ecommerce-analytics}{\links{Code}} $|$ \href{https://srini2k03.github.io/olist-ecommerce-analytics/app/}{\links{Dashboard}} $|$ 2026}
       \resumeItemListStart
-        \resumeItem{Wrote 16 analytical SQL queries (CTEs, window functions) over 99,441 orders, verified in CI to return identical results on DuckDB and PostgreSQL.}
+        \resumeItem{Wrote 16 analytical SQL queries (CTEs, window functions) over 99,441 orders, cross-checked in CI on DuckDB and PostgreSQL.}
         \resumeItem{Showed late deliveries drop average review score from 4.29 to 2.27 stars (bootstrap CI, ordinal regression) and found an RFM segment holding 12.4\% of customers but 38.6\% of revenue.}
         \resumeItem{Ran a simulated A/B test of free shipping (power analysis, SRM check, Bayesian posterior): uplift was significant, but subsidy cost R\$9.60 per order for R\$1.44 extra revenue, so recommended against launch.}
       \resumeItemListEnd
@@ -150,14 +150,14 @@
       {\href{https://github.com/srini2k03/multimodal-deepfake-detection}{\links{Code}} $|$ \href{https://srini2k03.github.io/multimodal-deepfake-detection/}{\links{Demo}} $|$ 2025}
       \resumeItemListStart
         \resumeItem{Built a video, image and audio deepfake detector: Xception and InceptionV3 face models (two-stage transfer learning) with attention pooling over frames, plus a log-mel spectrogram CNN for audio, combined by late fusion.}
-        \resumeItem{Added Grad-CAM explanations; served through a Flask REST API (async jobs) and React dashboard, containerized with Docker; in-browser demo runs face detection and alignment client-side.}
+        \resumeItem{Added Grad-CAM explanations; served through a Flask REST API (async jobs) and React dashboard, containerized with Docker.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd
   \vspace{-4pt}
   \small{\textbf{Other projects:}
-  \href{https://github.com/srini2k03/abalone-age-regression}{\underline{Abalone Age Regression}} (ensemble of 7 models, hold-out RMSLE 0.166, 41.6\% below baseline, in-browser XGBoost);
-  \href{https://github.com/srini2k03/traffic-violation-fine-manager}{\underline{Android e-Challan App}} (Kotlin, Jetpack Compose, Firebase, offline sync, 107 unit tests, CI-built APK);
+  \href{https://github.com/srini2k03/abalone-age-regression}{\underline{Abalone Age Regression}} (7-model ensemble, RMSLE 0.166, 41.6\% below baseline);
+  \href{https://github.com/srini2k03/traffic-violation-fine-manager}{\underline{Android e-Challan App}} (Kotlin, Jetpack Compose, Firebase, offline sync, CI-built APK);
   \href{https://github.com/srini2k03/Simple-Chat-Application-Using-Redis}{\underline{Redis Chat Service}} (Spring Boot, Redis, Docker).}
 
 %-----------EDUCATION-----------
