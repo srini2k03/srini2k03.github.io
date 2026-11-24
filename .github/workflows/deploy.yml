@@ -38,6 +38,13 @@ jobs:
         with:
           root_file: resume.tex
           working_directory: resume
+      - name: Résumé must fit on one page
+        working-directory: resume
+        run: |
+          pages=$(pdfinfo resume.pdf | awk '/^Pages:/{print $2}')
+          echo "pages: $pages"
+          pdftotext -layout resume.pdf - | sed 's/\f/\n===== PAGE BREAK =====\n/g'
+          [ "$pages" -eq 1 ] || { echo "::error::The résumé is $pages pages; it must fit on one page."; exit 1; }
       - uses: actions/upload-artifact@v4
         with:
           name: resume-pdf
