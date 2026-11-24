@@ -41,6 +41,7 @@ jobs:
       - name: Résumé must fit on one page
         working-directory: resume
         run: |
+          command -v pdfinfo > /dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils > /dev/null; }
           pages=$(pdfinfo resume.pdf | awk '/^Pages:/{print $2}')
           echo "pages: $pages"
           pdftotext -layout resume.pdf - | sed 's/\f/\n===== PAGE BREAK =====\n/g'
