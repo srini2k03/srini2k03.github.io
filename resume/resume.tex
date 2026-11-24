@@ -99,8 +99,7 @@
   \resumeItemListStart
     \resumeItem{Built a RAG system over 2,000+ Reserve Bank of India notifications: BM25 + dense retrieval (BGE embeddings in Qdrant) merged with Reciprocal Rank Fusion, then cross-encoder reranking, with numbered source citations in every answer.}
     \resumeItem{Added a calibrated confidence gate (threshold tuned for refusal F0.5 on a document-level split) so the system answers ``I don't know'' instead of hallucinating on out-of-scope questions.}
-    \resumeItem{Built an evaluation harness (Recall@k, MRR, nDCG, NLI faithfulness, citation accuracy, LLM-as-judge, bootstrap CIs) with a 36-config retrieval ablation automated as a daily GitHub Actions workflow.}
-    % TODO: once evaluation finishes, add the headline number, e.g. "hybrid + rerank reached Recall@5 of X vs Y for BM25 alone"
+    \resumeItem{Ran a 36-config retrieval ablation on a document-split test set (155 questions): BM25 alone beat hybrid + rerank (document Recall@5 0.85 vs 0.82, nDCG@10 0.70). Generated answers scored 0.95 faithfulness (LLM judge, NLI cross-check) and the refusal gate reached 0.91 precision.}
   \resumeItemListEnd
 
 \resumeProjectHeading
@@ -116,10 +115,9 @@
   {\textbf{Job-Post to JSON Extractor -- LoRA Fine-Tuning} $|$ \emph{Qwen2.5, HF TRL, llama.cpp}}
   {\href{https://github.com/srini2k03/jobpost-extractor-qlora}{\links{Code}} $|$ \href{https://srini2k03.github.io/jobpost-extractor-qlora/}{\links{Site}} $|$ 2026}
   \resumeItemListStart
-    \resumeItem{Building a LoRA fine-tune of Qwen2.5-0.5B-Instruct (TRL SFT, completion-only loss) to convert noisy Indian job posts (WhatsApp forwards, Hinglish) into schema-validated JSON across 11 fields, returning null instead of guessing missing values.}
-    \resumeItem{Generated a 3,000-example synthetic dataset with MinHash de-duplication and template-disjoint splits to prevent leakage; scored with field-level exact match, micro/macro F1 and hallucination rate with bootstrap CIs (regex baseline: 93.1 micro-F1).}
-    \resumeItem{Built the 4-bit GGUF quantization and in-browser serving path (llama.cpp WebAssembly) with JSON-grammar constrained decoding.}
-    % TODO: when training finishes, add "fine-tuned model: X micro-F1 vs 93.1 regex baseline, Y% hallucination rate"
+    \resumeItem{LoRA fine-tuned Qwen2.5-0.5B-Instruct (TRL SFT, completion-only loss) on CPU in GitHub Actions to convert noisy Indian job posts (WhatsApp forwards, Hinglish) into schema-validated JSON across 11 fields, returning null instead of guessing missing values.}
+    \resumeItem{Raised micro-F1 from 71.6\% (base model) to 99.3\% and cut hallucinated fields from 67\% to 1.9\% on 471 held-out synthetic posts (template-disjoint, MinHash-deduplicated splits), beating GPT-OSS-120B few-shot (97.9\%).}
+    \resumeItem{Quantized to 4-bit GGUF (0.40 GB, 99.0 micro-F1) and served it in the browser via llama.cpp WebAssembly with JSON-grammar constrained decoding.}
   \resumeItemListEnd
 
 \resumeProjectHeading
