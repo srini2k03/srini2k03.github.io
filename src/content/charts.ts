@@ -142,12 +142,24 @@ export const jobpostApproaches = [
   { label: "LoRA 0.5B F16", f1: 99.3, halluc: 1.9, n: 471, ours: true },
 ] as const;
 
+/** jobpost-extractor-qlora/results/metrics/*__test_real.json: 130 real Indian job postings (AI-assisted labels, not human-verified). */
+export const jobpostReal = [
+  { label: "0.5B zero-shot (base)", f1: 32.0, halluc: 58.4, ours: false },
+  { label: "0.5B 3-shot + grammar", f1: 35.7, halluc: 23.9, ours: false },
+  { label: "1.5B zero-shot", f1: 50.2, halluc: 35.4, ours: false },
+  { label: "3B zero-shot", f1: 56.4, halluc: 30.3, ours: false },
+  { label: "Regex rules", f1: 60.4, halluc: 5.5, ours: false },
+  { label: "LoRA 0.5B 4-bit", f1: 54.4, halluc: 7.6, ours: true },
+  { label: "LoRA 0.5B F16", f1: 56.1, halluc: 7.9, ours: true },
+  { label: "LoRA 0.5B 4-bit + grammar", f1: 56.9, halluc: 7.9, ours: true },
+] as const;
+
 /** rbi-circulars-rag/results/benchmark/strategies.csv: chunk nDCG@10 on the test split (130 answerable questions); deployable strategies only (oracle filters excluded). */
 export const rbiStrategies = [
   { label: "BM25 + parent context", value: 0.715 },
   { label: "Weighted hybrid (z-score, 0.7/0.3)", value: 0.704 },
   { label: "BM25 + RM3 expansion", value: 0.704 },
-  { label: "BM25 (served)", value: 0.697, baseline: true },
+  { label: "BM25 (served)", value: 0.697, served: true },
   { label: "Weighted hybrid + rerank", value: 0.688 },
   { label: "BM25 + rerank", value: 0.663 },
   { label: "RRF hybrid (tuned)", value: 0.639 },

@@ -6,7 +6,7 @@ const facts = [
   { k: "Education", v: `B.E. Information Science, ${profile.education.school} · ${profile.education.grade}` },
   { k: "Experience", v: "Software Intern (AI/ML), AIMPLIFY · 2024" },
   { k: "Based in", v: profile.location },
-  { k: "Now", v: "Open to full-time roles; next up: a human-verified RAG test set and real job posts for the extractor" },
+  { k: "Now", v: "Open to full-time roles; next up: human-verifying the RAG test set and the real job-post labels" },
 ];
 
 export function About() {

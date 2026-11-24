@@ -131,9 +131,9 @@
       {\textbf{Job-Post to JSON Extractor -- LoRA Fine-Tuned LLM} $|$ \emph{Qwen2.5, HF TRL, llama.cpp}}
       {\href{https://github.com/srini2k03/jobpost-extractor-qlora}{\links{Code}} $|$ \href{https://srini2k03.github.io/jobpost-extractor-qlora/}{\links{Live Demo}} $|$ 2026}
       \resumeItemListStart
-        \resumeItem{Fine-tuned Qwen2.5-0.5B-Instruct with LoRA (TRL SFT, completion-only loss) to convert noisy Indian job posts (WhatsApp forwards, Hinglish) into schema-validated JSON across 11 fields, returning null instead of guessing missing values.}
-        \resumeItem{Raised micro-F1 from 71.6\% (base model) to 99.3\% and cut hallucinated fields from 67\% to 1.9\% on 471 held-out synthetic posts (template-disjoint, MinHash-deduplicated splits), beating GPT-OSS-120B few-shot (97.9\%).}
-        \resumeItem{Quantized to 4-bit GGUF (0.40 GB, 99.0\% F1) and served it in-browser via llama.cpp WebAssembly with JSON-grammar decoding.}
+        \resumeItem{Fine-tuned Qwen2.5-0.5B-Instruct with LoRA (TRL SFT, completion-only loss) to turn noisy Indian job posts into schema-validated JSON across 11 fields with an evidence span for every value; micro-F1 99.3\% on synthetic posts.}
+        \resumeItem{Built a 130-posting real-world test set from licence-checked sources: the fine-tune scored 56.1\% micro-F1, matching a 6x larger Qwen2.5-3B (56.4\%) with a quarter of its hallucinated fields (7.9\% vs 30.3\%).}
+        \resumeItem{Calibrated field confidence on validation (real-post ECE 0.20 to 0.10, AUROC 0.88) and served a 0.40 GB 4-bit GGUF in-browser via llama.cpp WebAssembly with JSON-grammar decoding.}
       \resumeItemListEnd
 
     \resumeProjectHeading

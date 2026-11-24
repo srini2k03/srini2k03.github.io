@@ -1,6 +1,6 @@
 "use client";
 
-import { abaloneCv, creditLoad, creditModels, creditShap, jobpostApproaches, olistDelay, olistPeeking, olistSegments, rbiAblation, rbiGeneration, rbiStrategies } from "@/content/charts";
+import { abaloneCv, creditLoad, creditModels, creditShap, jobpostApproaches, jobpostReal, olistDelay, olistPeeking, olistSegments, rbiAblation, rbiGeneration, rbiStrategies } from "@/content/charts";
 import { AblationGrid, BarList, ChartCard, LogLine, PairedBars } from "./charts";
 import { DecisionLab } from "./decision-lab";
 
@@ -102,14 +102,25 @@ export function ProjectResults({ slug }: { slug: string }) {
       return (
         <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
           <ChartCard
+            title="Real job postings"
+            subtitle="130 real Indian postings from 4 licence-checked public sources · AI-assisted labels, not human-verified"
+            source="results/metrics/*__test_real.json"
+            table={{ head: ["Approach", "Micro-F1 %", "Hallucinated fields %"], rows: jobpostReal.map((a) => [a.label, a.f1, a.halluc]) }}
+          >
+            <BarList data={jobpostReal.map((a) => ({ label: a.label, value: a.f1, baseline: !a.ours }))} format={(v) => v.toFixed(1)} max={100} />
+            <p className="mt-3 text-[12.5px] text-muted">
+              Real text is much harder than the synthetic set (99.3% → 56.1%). The fine-tune matches a 6× larger 3B model on micro-F1 with a quarter of its hallucinations (7.9% vs 30.3%). Regex leads on micro-F1 only because list items dominate it; on role and company it trails badly (52% vs 82%, 34% vs 81%).
+            </p>
+          </ChartCard>
+          <ChartCard
             title="Micro-F1 by approach"
-            subtitle="Qwen2.5-Instruct base models vs the LoRA fine-tune, on the synthetic test split (n = 471; API and grammar rows on a fixed 200-post subset)"
+            subtitle="Synthetic test split (n = 471; API and grammar rows on a fixed 200-post subset)"
             source="results/results_table.md"
             table={{ head: ["Approach", "Micro-F1 %", "Hallucinated fields %", "n"], rows: jobpostApproaches.map((a) => [a.label, a.f1, a.halluc, a.n]) }}
           >
             <BarList data={jobpostApproaches.map((a) => ({ label: a.label, value: a.f1, baseline: !a.ours }))} format={(v) => v.toFixed(1)} max={100} />
             <p className="mt-3 text-[12.5px] text-muted">
-              Hallucinated fields (filled in when they should be null): base 0.5B 67.1%, regex 2.5%, LoRA 1.9%, GPT-OSS-120B 1.0%. The fine-tune wins on F1; the 120B model still guesses slightly less. All numbers are on synthetic posts, not real ones.
+              Hallucinated fields (filled in when they should be null): base 0.5B 67.1%, regex 2.5%, LoRA 1.9%, GPT-OSS-120B 1.0%. On synthetic posts the fine-tune wins on F1; the 120B model still guesses slightly less.
             </p>
           </ChartCard>
           <ChartCard title="Dataset, by construction" subtitle="Splits are disjoint by template family and company" source="data/processed/stats.json">
@@ -134,7 +145,7 @@ export function ProjectResults({ slug }: { slug: string }) {
             source="results/benchmark/strategies.csv"
             table={{ head: ["Strategy", "nDCG@10"], rows: rbiStrategies.map((d) => [d.label, d.value.toFixed(3)]) }}
           >
-            <BarList data={rbiStrategies} format={(v) => v.toFixed(3)} max={0.8} />
+            <BarList data={rbiStrategies.map((d) => ({ label: d.label, value: d.value, baseline: !("served" in d) }))} format={(v) => v.toFixed(3)} max={0.8} />
             <p className="mt-4 text-[12.5px] text-muted">
               Paired randomisation tests with Holm correction: the original RRF hybrid + rerank is 0.172 below BM25 (p = 0.002), and no strategy beats BM25 significantly. The served profile ranks with BM25 and uses the cross-encoder only to decide whether to answer.
             </p>
