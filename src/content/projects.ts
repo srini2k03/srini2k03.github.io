@@ -70,7 +70,7 @@ export const projects: Project[] = [
       "Question answering over 2,000+ Reserve Bank of India notifications. Every answer cites its sources, and the system refuses when retrieval confidence is low.",
     status: [
       { label: "Retrieval live in browser", tone: "live" },
-      { label: "Daily evaluation running", tone: "pending" },
+      { label: "Evaluation complete", tone: "info" },
     ],
     skills: ["Python", "RAG", "Hugging Face Transformers", "Qdrant", "BM25", "Cross-Encoder Reranking", "FastAPI", "Docker", "GitHub Actions (CI/CD)", "Pytest", "Streamlit", "Ollama"],
     links: [
@@ -81,7 +81,7 @@ export const projects: Project[] = [
       "RBI publishes thousands of circulars that look almost identical. A compliance analyst needs the one rule that applies, with a citation to the exact notification. A plain LLM will invent a plausible-sounding rule. This system retrieves first, cites every claim, and declines to answer when the evidence is weak.",
     pipeline: [
       { name: "Crawl", detail: "Polite httpx crawler (≥1 s between requests, retries with backoff, SHA-256 manifest); corpus-v1 has 2,153 documents" },
-      { name: "Parse & chunk", detail: "HTML/PDF parsing with selectolax and PyMuPDF; fixed, semantic or section-aware chunkers (default: section-aware, 512 tokens, 64 overlap)" },
+      { name: "Parse & chunk", detail: "HTML/PDF parsing with selectolax and PyMuPDF; fixed, semantic or section-aware chunkers at 256/512/1024 tokens (the ablation picked fixed-size chunks)" },
       { name: "Sparse + dense", detail: "BM25 plus BAAI/bge-small-en-v1.5 (384-d) embeddings in Qdrant" },
       { name: "RRF fusion", detail: "Reciprocal Rank Fusion (k = 60) merges the two ranked lists without needing comparable scores" },
       { name: "Rerank", detail: "cross-encoder/ms-marco-MiniLM-L-6-v2 reranks 50 candidates down to 20, and the top 5 go to the LLM" },
@@ -92,14 +92,15 @@ export const projects: Project[] = [
     highlights: [
       "Built a RAG system over 2,000+ RBI notifications: BM25 and dense retrieval (BGE embeddings in Qdrant) merged with Reciprocal Rank Fusion, then cross-encoder reranking, with numbered source citations in every answer.",
       "Added a calibrated confidence gate (threshold tuned for refusal F0.5 on a document-level split), so the system says “I don't know” instead of hallucinating on out-of-scope questions.",
-      "Built an evaluation harness (Recall@k, MRR, nDCG, NLI faithfulness, citation accuracy, LLM-as-judge, bootstrap CIs) with a 36-configuration retrieval ablation (4 modes × 3 chunkers × 3 chunk sizes) scheduled daily in GitHub Actions.",
+      "Ran a 36-configuration retrieval ablation (4 modes × 3 chunkers × 3 chunk sizes) on 155 test questions from 130 held-out documents. Plain BM25 beat hybrid + rerank (document Recall@5 0.85 vs 0.82; best chunk nDCG@10 0.70), and the README reports that instead of the expected winner.",
+      "Judged every generated answer with a local Qwen2.5-7B (sharded across parallel GitHub Actions runners) plus an NLI cross-check: faithfulness 0.95 for a local Qwen2.5-3B (n = 155) and 0.99 for GPT-OSS-20B via Groq (n = 60); the refusal gate reached 0.91 precision and 0.84 recall on unanswerable questions.",
       "Shipped the same retrieval stack to the browser: BM25, BGE and the MiniLM reranker run client-side with transformers.js over an int8-quantised index.",
     ],
     metrics: [
-      { value: 2000, suffix: "+", label: "RBI notifications indexed", context: "corpus-v1: 2,153 documents" },
-      { value: 36, label: "Ablation configs", context: "4 retrieval modes × 3 chunkers × 3 sizes" },
-      { value: 253, prefix: "~", label: "Automated tests", context: "31 test files, strict mypy" },
-      { value: 4, label: "Retrieval stages", context: "BM25 → dense → RRF → rerank" },
+      { value: 2153, label: "RBI notifications indexed", context: "29,655 passages, 1997–2025" },
+      { value: 0.70, decimals: 2, label: "Best chunk nDCG@10", context: "BM25, 512-token chunks · doc Recall@5 0.85 · n = 155 test questions" },
+      { value: 0.95, decimals: 2, label: "Answer faithfulness", context: "local Qwen2.5-3B, judged by Qwen2.5-7B, n = 155" },
+      { value: 0.91, decimals: 2, label: "Refusal precision", context: "“I don't know” gate · recall 0.84" },
     ],
     decisions: [
       { title: "RRF instead of score fusion", body: "BM25 scores and cosine similarities are on different scales. Rank fusion needs no normalisation, so it holds up when the corpus or the embedding model changes." },
@@ -107,16 +108,17 @@ export const projects: Project[] = [
       { title: "Gold evidence as character spans", body: "The ground truth is stored as character offsets rather than chunk IDs, so the three chunkers can be compared fairly." },
       { title: "Two independent faithfulness checks", body: "An NLI model (DeBERTa-v3) checks faithfulness alongside the LLM judge, so the metric does not rest on a single LLM's opinion." },
       { title: "Honest test-set provenance", body: "Every Q/A pair is labelled as model-generated, AI-reviewed or human-verified, and runs below 90% completion are reported as incomplete." },
+      { title: "Report the result you got", body: "Hybrid retrieval plus reranking was expected to win. On exact regulatory wording, plain BM25 did better, so the README and this page say so and keep the full 36-row table." },
     ],
     engineering: [
-      { label: "Tests", value: "~253 test functions in 31 files, plus Playwright browser tests and JS/Python parity checks" },
+      { label: "Tests", value: "~275 test functions, plus Playwright browser tests and JS/Python parity checks" },
       { label: "CI", value: "ruff, strict mypy, pytest on Python 3.11/3.12, Docker Compose smoke test that curls /query, streaming and /metrics" },
-      { label: "Scheduled jobs", value: "Daily Q/A generation and daily evaluation workflows (cron), resumable within free-tier quotas" },
+      { label: "Evaluation infra", value: "One dispatch runs sharded generation and judging on ~20 parallel runners; records merge by union, so overlapping runs never lose work" },
       { label: "Packaging", value: "Non-root Dockerfiles for the API and UI; Compose stack with Qdrant and an optional Ollama profile" },
     ],
     honesty:
-      "The evaluation harness and the 36-config ablation are implemented and scheduled daily, but no benchmark numbers have been committed yet. This page will show Recall@k and faithfulness only after the runs finish.",
-    next: ["Publish the ablation results (hybrid + rerank vs BM25 alone)", "Grow the reviewed test set toward 220 answerable and 30 unanswerable questions"],
+      "The test set is 216 model-generated Q/A pairs; 50 were reviewed by an AI assistant and none are human-verified yet. Answers were judged by a small local model (Qwen2.5-7B), because the free API tier allowed only about 30 judge calls a day; a strict NLI check scores faithfulness much lower (0.13–0.29), and both numbers are reported. The API model ran on a fixed 60-question subset for the same reason.",
+    next: ["Human-verify the test set", "Re-judge with a larger model when API quota allows"],
     inBrowser: "BM25, BGE embeddings and the cross-encoder reranker run client-side through transformers.js.",
   },
   {
@@ -187,13 +189,14 @@ export const projects: Project[] = [
     tagline:
       "Turns messy Indian job posts (WhatsApp forwards, Hinglish, “12 LPA”) into one strict 11-field JSON object. Fields the post does not state come back null, not guessed.",
     status: [
-      { label: "Baselines measured", tone: "info" },
-      { label: "CPU LoRA training in progress", tone: "pending" },
+      { label: "In-browser model live", tone: "live" },
+      { label: "Results committed", tone: "info" },
     ],
     skills: ["Python", "Hugging Face Transformers", "TRL (LoRA fine-tuning)", "llama.cpp/GGUF Quantization", "Ollama", "FastAPI", "Docker", "GitHub Actions (CI/CD)", "Pytest", "NumPy"],
     links: [
       { label: "Code", href: "https://github.com/srini2k03/jobpost-extractor-qlora", kind: "code" },
-      { label: "Project site", href: "https://srini2k03.github.io/jobpost-extractor-qlora/", kind: "site", note: "The in-browser model demo appears once training finishes" },
+      { label: "Live demo", href: "https://srini2k03.github.io/jobpost-extractor-qlora/", kind: "demo", note: "The 4-bit model (~400 MB) downloads once, then runs entirely in your browser" },
+      { label: "Model release", href: "https://github.com/srini2k03/jobpost-extractor-qlora/releases/tag/model-v1", kind: "code" },
     ],
     problem:
       "Job posts in India arrive as WhatsApp forwards, Telegram blasts and Naukri copy-pastes, mixing Hindi and English, with salaries such as “8–12 LPA”. Downstream systems need strict JSON. A general LLM will happily invent a missing salary or location, so the goal is a small model that extracts what is there and returns null for what is not.",
@@ -208,16 +211,16 @@ export const projects: Project[] = [
       { name: "Serve", detail: "FastAPI with schema validation and retry; Q4_K_M runs in the browser via llama.cpp WASM with grammar-constrained decoding" },
     ],
     highlights: [
-      "Set up LoRA fine-tuning of Qwen2.5-0.5B-Instruct (TRL SFT, completion-only loss) to convert noisy Indian job posts into schema-validated JSON across 11 fields, returning null instead of guessing missing values.",
+      "LoRA fine-tuned Qwen2.5-0.5B-Instruct (TRL SFT, completion-only loss, 2 epochs) on CPU in GitHub Actions to convert noisy Indian job posts into schema-validated JSON across 11 fields, returning null instead of guessing missing values.",
+      "Raised micro-F1 from 71.6% (base model, zero-shot) to 99.3% and cut hallucinated fields from 67% to 1.9% on 471 held-out synthetic posts, beating GPT-OSS-120B few-shot (97.9%) and a regex baseline (93.1%).",
       "Generated a 3,000-example synthetic dataset with MinHash de-duplication and template-disjoint splits to prevent leakage; scored with field-level exact match, micro/macro F1 and hallucination rate, with bootstrap CIs.",
-      "Measured a regex baseline at 93.1 micro-F1 [92.5, 93.8] with a 2.5% hallucination rate, the bar the fine-tuned model has to clear.",
-      "Built CPU-only training as chained, checkpointed GitHub Actions jobs, plus a GGUF quantisation and in-browser llama.cpp (WebAssembly) serving path.",
+      "Quantised to 4-bit GGUF (0.40 GB, 99.0 micro-F1, 56 tokens/s on 4 CPU threads) and served it in the browser with llama.cpp compiled to WebAssembly, using JSON-grammar constrained decoding.",
     ],
     metrics: [
-      { value: 93.1, decimals: 1, label: "Regex baseline micro-F1", context: "95% CI [92.5, 93.8], n = 471 (synthetic test)" },
-      { value: 3000, label: "Synthetic labelled posts", context: "0 duplicates, 0 failed validation" },
-      { value: 11, label: "Schema fields", context: "null or [] when absent, never guessed" },
-      { value: 117, prefix: "~", label: "Automated tests", context: "16 test files, including leakage tests" },
+      { value: 99.3, decimals: 1, suffix: "%", label: "Micro-F1 after fine-tuning", context: "base model 71.6% · n = 471 synthetic test posts" },
+      { value: 1.9, decimals: 1, suffix: "%", label: "Hallucinated fields", context: "down from 67.1% for the base model" },
+      { value: 97.9, decimals: 1, suffix: "%", label: "GPT-OSS-120B few-shot", context: "the 0.5B fine-tune beats it on this test set" },
+      { value: 0.4, decimals: 2, suffix: " GB", label: "4-bit model in the browser", context: "Q4_K_M · 99.0% micro-F1 · 56 tokens/s on CPU" },
     ],
     decisions: [
       { title: "Labels known by construction", body: "Synthetic generation means every gold value is known exactly. A recoverability checker rejects any example whose answer is not literally present in the text." },
@@ -229,12 +232,12 @@ export const projects: Project[] = [
     engineering: [
       { label: "Tests", value: "~117 test functions in 16 files: leakage, completion gating, schema, serving" },
       { label: "CI", value: "ruff, mypy, pytest; regenerates the results table and fails if the committed copy is stale" },
-      { label: "Training infra", value: "CPU fine-tune split into 5-hour chained jobs on a cron, checkpointing to a GitHub prerelease" },
+      { label: "Training infra", value: "CPU fine-tune (273 steps, ~5 h) in chained GitHub Actions jobs; checkpoints and the adapter are handed over as artifacts, then released as model-v1" },
       { label: "Serving", value: "Non-root Docker image (llama-cpp-python) with HEALTHCHECK and a regex fallback backend" },
     ],
     honesty:
-      "Training is still running on CPU in GitHub Actions. No fine-tuned scores, quantised model or in-browser demo exist yet, and none are claimed here. The only committed final result is the regex baseline. A partial GPT-OSS-120B run (25 of 200) is left out of the results on purpose.",
-    next: ["Release model-v1 and publish fine-tuned F1 and hallucination rate against the 93.1 baseline", "Evaluate on about 200 real job posts, not just the synthetic test split"],
+      "All scores come from the synthetic test split (template families and companies held out from training). A real-posting test set has not been built yet, so these are not real-world accuracy figures, and the regex baseline is flattered by the synthetic data.",
+    next: ["Evaluate on about 200 real job posts, not just the synthetic test split"],
   },
   {
     slug: "olist-analytics",
@@ -454,8 +457,8 @@ export const projectBySlug = (slug: string) => projects.find((p) => p.slug === s
 /** Aggregates computed from the data above, so headline numbers can never drift from the projects. */
 export const proof = {
   endToEnd: featuredProjects.length,
-  /** Approximate test-function counts per repo: RBI 253, credit 44, jobpost 117, olist 42, deepfake 61, abalone 56, android 107. */
-  testsApprox: 253 + 44 + 117 + 42 + 61 + 56 + 107,
+  /** Approximate test-function counts per repo: RBI 275, credit 44, jobpost 117, olist 42, deepfake 61, abalone 56, android 107. */
+  testsApprox: 275 + 44 + 117 + 42 + 61 + 56 + 107,
   inBrowserCount: projects.filter((p) => p.inBrowser).length,
   liveDemos: projects.filter((p) => p.status.some((s) => s.tone === "live")).length,
   /** Count of .github/workflows files across the seven project repos (5+5+8+3+2+2+2). */
