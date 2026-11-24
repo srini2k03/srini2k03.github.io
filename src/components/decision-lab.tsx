@@ -12,9 +12,9 @@ const metrics = [
 ] as const;
 
 const notes: Record<string, string> = {
-  default: "The textbook 0.5 cutoff. It approves 88.7% of applicants and misses about two-thirds of defaulters, which is the most expensive choice when a miss costs 5× a false alarm.",
+  default: "The textbook 0.5 cutoff. It approves 88.4% of applicants and misses about two-thirds of defaulters, which is the most expensive choice when a miss costs 5× a false alarm.",
   maxf1: "Maximising F1 balances precision and recall, but F1 does not know a miss costs five times a false alarm, so it still leaves money on the table.",
-  cost: "The threshold that minimises expected cost on validation (0.13, next to the Bayes value 1/6 ≈ 0.167). It catches 76.6% of defaulters and cuts expected cost by 25.9% against the 0.5 default.",
+  cost: "The threshold that minimises expected cost on validation (0.16, next to the Bayes value 1/6 ≈ 0.167). It catches 77.7% of defaulters and cuts expected cost by 25.9% against the 0.5 default.",
 };
 
 export function DecisionLab() {

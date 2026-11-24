@@ -19,12 +19,12 @@ function Frame({ children, caption }: { children: React.ReactNode; caption: stri
 function RagFunnel() {
   const stages = [
     { label: "corpus-v1 documents", value: "2,153", w: 1 },
-    { label: "BM25 ∪ BGE dense candidates", value: "50", w: 0.72 },
-    { label: "RRF fused, cross-encoder reranked", value: "20", w: 0.48 },
+    { label: "BM25 candidates", value: "20", w: 0.62 },
+    { label: "cross-encoder scores them (gate)", value: "20", w: 0.48 },
     { label: "context passed to the LLM", value: "top 5", w: 0.28 },
   ];
   return (
-    <Frame caption="Retrieval funnel with default config values (config.py). Answers only if sigmoid(rerank logit) ≥ τ.">
+    <Frame caption="Served profile after the 108-config benchmark: BM25 ranks, the cross-encoder only gates. Answers only if its top probability ≥ τ.">
       <div className="flex h-full flex-col justify-center gap-3">
         {stages.map((s, i) => (
           <div key={s.label}>
@@ -72,14 +72,14 @@ function CreditCompare() {
     { label: "Default recall", a: base.recall, b: best.recall, max: 1, fmt: (v: number) => `${Math.round(v * 100)}%` },
   ];
   return (
-    <Frame caption="Test holdout, n = 6,000 (results/metrics.md). Lower cost is better; costs in units of one false alarm.">
+    <Frame caption="Test holdout, n = 6,000 (results/metrics.json). Lower cost is better; costs in units of one false alarm.">
       <div className="flex h-full flex-col justify-center gap-6">
         <div className="flex gap-4 text-[11px] text-fg-soft">
           <span className="flex items-center gap-1.5">
             <span className="size-2.5 rounded-sm bg-[var(--series-muted)]" /> 0.5 default
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-sm bg-[var(--series-1)]" /> cost-optimal (t = 0.13)
+            <span className="size-2.5 rounded-sm bg-[var(--series-1)]" /> cost-optimal (t = 0.16)
           </span>
         </div>
         {rows.map((r, ri) => (
@@ -215,23 +215,23 @@ function DelayMini() {
 function FusionDiagram() {
   const box = "rounded-lg border border-line bg-surface px-2.5 py-2 text-center text-[11.5px] leading-tight text-fg-soft";
   return (
-    <Frame caption="Architecture as implemented in backend/deepfake_detector/models. Benchmark training is still pending.">
+    <Frame caption="Trained: EfficientNetV2-B0 faces and the audio CNN, each calibrated. Fusion is implemented but not evaluated (no lawful paired data).">
       <div className="grid h-full grid-cols-[1fr_auto_1.2fr_auto_1fr] items-center gap-2">
         <div className="grid gap-2">
-          <div className={box}>32 frames → aligned faces 299²</div>
+          <div className={box}>frames → aligned faces 224²</div>
           <div className={box}>audio → log-mel</div>
         </div>
         <Arrow />
         <div className="grid gap-2">
-          <div className={`${box} border-[color-mix(in_srgb,var(--rose)_40%,transparent)]`}>Xception + InceptionV3 → attention pooling</div>
-          <div className={box}>3-block audio CNN</div>
+          <div className={`${box} border-[color-mix(in_srgb,var(--rose)_40%,transparent)]`}>EfficientNetV2-B0 → mean over frames</div>
+          <div className={box}>silence trim → audio CNN</div>
         </div>
         <Arrow />
         <div className="grid gap-2">
           <div className={`${box} text-fg`}>
             late fusion
             <br />
-            <span className="font-mono text-[10px] text-muted">0.7 · v + 0.3 · a</span>
+            <span className="font-mono text-[10px] text-muted">heuristic · not evaluated</span>
           </div>
           <div className={box}>Grad-CAM heatmap</div>
         </div>

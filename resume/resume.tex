@@ -110,21 +110,21 @@
   \resumeSubHeadingListStart
 
     \resumeProjectHeading
-      {\textbf{RBI Regulations Q\&A -- Hybrid RAG with Citations} $|$ \emph{Python, Qdrant, FastAPI, Docker}}
+      {\textbf{RBI Regulations Q\&A -- RAG with Verified Citations} $|$ \emph{Python, Qdrant, FastAPI, Docker}}
       {\href{https://github.com/srini2k03/rbi-circulars-rag}{\links{Code}} $|$ \href{https://srini2k03.github.io/rbi-circulars-rag/}{\links{Live Demo}} $|$ 2026}
       \resumeItemListStart
-        \resumeItem{Built a RAG system over 2,153 Reserve Bank of India notifications (29,655 passages): BM25 + dense retrieval (BGE embeddings in Qdrant) merged with Reciprocal Rank Fusion, then cross-encoder reranking, with numbered source citations in every answer.}
-        \resumeItem{Added a calibrated confidence gate (threshold tuned on a document-level dev split) so the system answers ``I don't know'' instead of hallucinating; it reached 0.91 precision and 0.84 recall on unanswerable questions.}
-        \resumeItem{Ran a 36-config retrieval ablation on a held-out, document-split test set: BM25 alone beat hybrid + rerank (document Recall@5 0.85 vs 0.82, nDCG@10 0.70); generated answers scored 0.95 faithfulness (LLM judge with an NLI cross-check, bootstrap CIs).}
+        \resumeItem{Built a RAG system over 2,153 Reserve Bank of India notifications: BM25 + BGE dense retrieval (Qdrant), cross-encoder scoring, claim-level citation verification, and an amendment graph from 9,183 cross-references (94\% sampled precision).}
+        \resumeItem{Benchmarked 108 retrieval configs with paired significance tests: RRF hybrid + rerank scored 0.172 nDCG@10 below BM25 ($p = 0.002$), so I redeployed BM25 ranking with the cross-encoder as an abstention gate (AUROC 0.952).}
+        \resumeItem{Explained a 0.95 vs 0.19 LLM-judge vs NLI faithfulness gap: 86\% of passages exceeded the NLI model's 512-token input, and claim-level checks raised NLI faithfulness to 0.70--0.73 on 195 answers.}
       \resumeItemListEnd
 
     \resumeProjectHeading
-      {\textbf{Credit Default Prediction -- End-to-End MLOps} $|$ \emph{LightGBM, MLflow, DVC, FastAPI}}
+      {\textbf{Credit Default Prediction -- Cost-Sensitive MLOps} $|$ \emph{LightGBM, MLflow, DVC, FastAPI}}
       {\href{https://github.com/srini2k03/credit-default-mlops}{\links{Code}} $|$ \href{https://credit-default-api-fkqg.onrender.com/docs}{\links{API}} $|$ \href{https://srini2k03.github.io/credit-default-mlops/}{\links{Site}} $|$ 2026}
       \resumeItemListStart
-        \resumeItem{Trained, tuned (Optuna) and calibrated LogReg, XGBoost and LightGBM on 30,000 credit-card customers; champion LightGBM scored ROC-AUC 0.778 and PR-AUC 0.536 on a 6,000-customer holdout.}
-        \resumeItem{Replaced the default 0.5 cutoff with a cost-optimal decision threshold (5:1 miss-to-false-alarm cost), cutting expected cost per applicant by 26\% and raising default recall from 35\% to 77\%.}
-        \resumeItem{Shipped the full lifecycle: Pandera validation, DVC versioning, MLflow registry with an automated promotion gate, per-prediction SHAP, Evidently drift-triggered retraining, and a Docker deploy to Render (p95 latency 170 ms under load, 0 failures).}
+        \resumeItem{Compared five model families (LogReg, random forest, XGBoost, LightGBM, CatBoost) on 30,000 credit-card customers; the Platt-calibrated LightGBM champion scored ROC-AUC 0.781 and PR-AUC 0.559 on a 6,000-customer holdout.}
+        \resumeItem{Built a configurable cost-sensitive decision engine (5:1 miss-to-false-alarm cost) that cut expected cost per applicant by 25.9\% vs a 0.5 cutoff and raised default recall from 35\% to 78\%.}
+        \resumeItem{Shipped champion/challenger governance (12-check promotion gate, rollback, drift policies that block or retrain) with MLflow, DVC and SHAP, plus a FastAPI service auto-deployed to Render whose NumPy scoring path raised throughput from 103 to 330 req/s.}
       \resumeItemListEnd
 
     \resumeProjectHeading
@@ -140,17 +140,17 @@
       {\textbf{E-Commerce Analytics, 99K Orders (Olist)} $|$ \emph{SQL, DuckDB, PostgreSQL, Streamlit}}
       {\href{https://github.com/srini2k03/olist-ecommerce-analytics}{\links{Code}} $|$ \href{https://srini2k03.github.io/olist-ecommerce-analytics/app/}{\links{Dashboard}} $|$ 2026}
       \resumeItemListStart
-        \resumeItem{Wrote 16 analytical SQL queries (CTEs, window functions) over 99,441 orders, cross-checked in CI on DuckDB and PostgreSQL.}
-        \resumeItem{Showed late deliveries drop average review score from 4.29 to 2.27 stars (bootstrap CI, ordinal regression) and found an RFM segment holding 12.4\% of customers but 38.6\% of revenue.}
-        \resumeItem{Ran a simulated A/B test of free shipping (power analysis, SRM check, Bayesian posterior): uplift was significant, but subsidy cost R\$9.60 per order for R\$1.44 extra revenue, so recommended against launch.}
+        \resumeItem{Built a layered DuckDB warehouse for 99,441 orders with 75 data-quality checks and 26 domain SQL queries (CTEs, window functions) verified identical on PostgreSQL in CI.}
+        \resumeItem{Showed late deliveries drop average review from 4.29 to 2.27 stars; a delivery-delay model validated on later months reached late-delivery PR-AUC 0.123 vs 0.069 for a baseline.}
+        \resumeItem{Simulated a free-shipping A/B test on real baskets (power, SRM check, bootstrap CIs): contribution would fall about R\$58.5k/month, so recommended against launch; built a 10-page in-browser dashboard.}
       \resumeItemListEnd
 
     \resumeProjectHeading
-      {\textbf{Multi-Modal Deepfake Detection} $|$ \emph{TensorFlow, OpenCV, Flask, React, Docker}}
+      {\textbf{Deepfake Detection -- Audio and Face Models} $|$ \emph{TensorFlow, OpenCV, Flask, React}}
       {\href{https://github.com/srini2k03/multimodal-deepfake-detection}{\links{Code}} $|$ \href{https://srini2k03.github.io/multimodal-deepfake-detection/}{\links{Demo}} $|$ 2025}
       \resumeItemListStart
-        \resumeItem{Built a video, image and audio deepfake detector: Xception and InceptionV3 face models (two-stage transfer learning) with attention pooling over frames, plus a log-mel spectrogram CNN for audio, combined by late fusion.}
-        \resumeItem{Added Grad-CAM explanations; served through a Flask REST API (async jobs) and React dashboard, containerized with Docker.}
+        \resumeItem{Trained a log-mel CNN on ASVspoof 2019 (7.65\% EER on unseen attacks), exposed a silence shortcut, and shipped a silence-trimmed model that holds 27.6\% vs 62.6\% EER at 10 dB SNR, running in-browser.}
+        \resumeItem{Fine-tuned EfficientNetV2-B0 to 0.914 ROC-AUC on identity-disjoint face data, reported a metadata-only 0.967 bias, and served both models via a calibrated Flask API with Grad-CAM.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd

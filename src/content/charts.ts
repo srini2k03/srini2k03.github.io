@@ -1,41 +1,43 @@
 /**
  * Chart data, copied verbatim from committed result files.
- * credit-default-mlops/results/metrics.md, results/figures/shap_importance.csv
+ * credit-default-mlops/results/metrics.json, results/figures/shap_importance.csv, results/loadtest.md
  * olist-ecommerce-analytics/results/sql/04_delivery_delay_vs_review.csv, results/metrics/{stats,segments}.json
  * abalone-age-regression/README.md (CV table)
- * rbi-circulars-rag/results/{retrieval_ablation.csv,generation.md}, jobpost-extractor-qlora/results/results_table.md
+ * rbi-circulars-rag/results/{retrieval_ablation.csv,generation.md,benchmark/strategies.csv}, jobpost-extractor-qlora/results/results_table.md
  */
 
 export const creditRules = [
-  { id: "default", label: "0.5 default", threshold: 0.5, cost: 0.7593, recall: 0.3466, precision: 0.6755, approval: 0.8865, f1: 0.4582 },
-  { id: "maxf1", label: "Max-F1", threshold: 0.3868, cost: 0.6192, recall: 0.5237, precision: 0.556, approval: 0.7917, f1: 0.5394 },
-  { id: "cost", label: "Cost-optimal", threshold: 0.13, cost: 0.5625, recall: 0.7664, precision: 0.3578, approval: 0.5263, f1: 0.4879 },
+  { id: "default", label: "0.5 default", threshold: 0.5, cost: 0.7523, recall: 0.3542, precision: 0.6724, approval: 0.8835, f1: 0.464 },
+  { id: "maxf1", label: "Max-F1", threshold: 0.334, cost: 0.6292, recall: 0.5117, precision: 0.5593, approval: 0.7977, f1: 0.5344 },
+  { id: "cost", label: "Cost-optimal", threshold: 0.16, cost: 0.5578, recall: 0.7769, precision: 0.3558, approval: 0.517, f1: 0.488 },
 ] as const;
 
 export const creditModels = [
-  { model: "Logistic regression", rocAuc: 0.7403, prAuc: 0.4782, brier: 0.1431, brierRaw: 0.1938, cost: 0.6012, recall: 0.7295 },
-  { model: "LightGBM (champion)", rocAuc: 0.7781, prAuc: 0.5362, brier: 0.1353, brierRaw: 0.1763, cost: 0.5625, recall: 0.7664 },
-  { model: "XGBoost", rocAuc: 0.7799, prAuc: 0.5351, brier: 0.1358, brierRaw: 0.1814, cost: 0.5682, recall: 0.7468 },
+  { model: "Logistic regression", rocAuc: 0.7331, prAuc: 0.4739, brier: 0.1435, brierRaw: 0.1951, cost: 0.6198, recall: 0.7302 },
+  { model: "Random forest", rocAuc: 0.7788, prAuc: 0.5551, brier: 0.1357, brierRaw: 0.177, cost: 0.5617, recall: 0.7875 },
+  { model: "LightGBM (champion)", rocAuc: 0.7807, prAuc: 0.5594, brier: 0.1346, brierRaw: 0.1766, cost: 0.5578, recall: 0.7769 },
+  { model: "XGBoost", rocAuc: 0.7797, prAuc: 0.5549, brier: 0.1357, brierRaw: 0.1824, cost: 0.5685, recall: 0.7076 },
+  { model: "CatBoost (research only)", rocAuc: 0.7823, prAuc: 0.5631, brier: 0.1352, brierRaw: 0.1775, cost: 0.5593, recall: 0.7227 },
 ] as const;
 
 export const creditShap = [
-  { label: "PAY_0 (latest repayment status)", value: 0.3029 },
-  { label: "max_delay", value: 0.2682 },
-  { label: "n_delayed", value: 0.1517 },
-  { label: "BILL_AMT1", value: 0.1057 },
-  { label: "LIMIT_BAL", value: 0.1034 },
-  { label: "util_mean", value: 0.089 },
-  { label: "PAY_AMT2", value: 0.0758 },
-  { label: "util_1", value: 0.0745 },
-  { label: "PAY_AMT1", value: 0.0639 },
-  { label: "pay_ratio_mean", value: 0.0563 },
+  { label: "max_delay", value: 0.4603 },
+  { label: "PAY_0 (latest repayment status)", value: 0.2585 },
+  { label: "LIMIT_BAL", value: 0.117 },
+  { label: "n_delayed", value: 0.1078 },
+  { label: "BILL_AMT1", value: 0.1071 },
+  { label: "util_1", value: 0.0984 },
+  { label: "util_mean", value: 0.0888 },
+  { label: "PAY_AMT2", value: 0.0828 },
+  { label: "PAY_AMT1", value: 0.0709 },
+  { label: "PAY_AMT3", value: 0.0658 },
 ];
 
 export const creditLoad = [
-  { endpoint: "POST /predict", rps: 63.6, p50: 88, p95: 170, p99: 190 },
-  { endpoint: "POST /explain", rps: 12.3, p50: 70, p95: 130, p99: 160 },
-  { endpoint: "POST /predict_batch (20)", rps: 11.9, p50: 100, p95: 180, p99: 190 },
-  { endpoint: "GET /health", rps: 6.1, p50: 22, p95: 87, p99: 110 },
+  { endpoint: "POST /predict", rps: 79.8, p50: 20, p95: 110, p99: 150 },
+  { endpoint: "POST /explain", rps: 15.6, p50: 53, p95: 130, p99: 170 },
+  { endpoint: "POST /predict_batch (20)", rps: 15.8, p50: 23, p95: 130, p99: 170 },
+  { endpoint: "GET /health", rps: 7.8, p50: 8, p95: 70, p99: 130 },
 ];
 
 export const olistDelay = [
@@ -139,3 +141,17 @@ export const jobpostApproaches = [
   { label: "LoRA 0.5B 4-bit", f1: 99.0, halluc: 2.0, n: 471, ours: true },
   { label: "LoRA 0.5B F16", f1: 99.3, halluc: 1.9, n: 471, ours: true },
 ] as const;
+
+/** rbi-circulars-rag/results/benchmark/strategies.csv: chunk nDCG@10 on the test split (130 answerable questions); deployable strategies only (oracle filters excluded). */
+export const rbiStrategies = [
+  { label: "BM25 + parent context", value: 0.715 },
+  { label: "Weighted hybrid (z-score, 0.7/0.3)", value: 0.704 },
+  { label: "BM25 + RM3 expansion", value: 0.704 },
+  { label: "BM25 (served)", value: 0.697, baseline: true },
+  { label: "Weighted hybrid + rerank", value: 0.688 },
+  { label: "BM25 + rerank", value: 0.663 },
+  { label: "RRF hybrid (tuned)", value: 0.639 },
+  { label: "RRF hybrid (original)", value: 0.582 },
+  { label: "RRF hybrid + rerank (original)", value: 0.525 },
+  { label: "Dense only", value: 0.481 },
+];

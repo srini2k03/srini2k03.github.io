@@ -1,6 +1,6 @@
 "use client";
 
-import { abaloneCv, creditLoad, creditModels, creditShap, jobpostApproaches, olistDelay, olistPeeking, olistSegments, rbiAblation, rbiGeneration } from "@/content/charts";
+import { abaloneCv, creditLoad, creditModels, creditShap, jobpostApproaches, olistDelay, olistPeeking, olistSegments, rbiAblation, rbiGeneration, rbiStrategies } from "@/content/charts";
 import { AblationGrid, BarList, ChartCard, LogLine, PairedBars } from "./charts";
 import { DecisionLab } from "./decision-lab";
 
@@ -41,14 +41,14 @@ export function ProjectResults({ slug }: { slug: string }) {
       return (
         <div className="grid gap-6 [&>*]:min-w-0">
           <DecisionLab />
-          <ChartCard title="Model comparison on the test holdout" subtitle="n = 6,000 · each model at its own cost-optimal threshold from validation" source="results/metrics.md">
+          <ChartCard title="Model comparison on the test holdout" subtitle="n = 6,000 · each family calibrated and at its own cost-optimal threshold from validation" source="results/metrics.json">
             <Table
               head={["Model", "ROC-AUC", "PR-AUC", "Brier (raw → calibrated)", "Cost / applicant", "Recall"]}
               rows={creditModels.map((m) => [m.model, m.rocAuc.toFixed(4), m.prAuc.toFixed(4), `${m.brierRaw.toFixed(4)} → ${m.brier.toFixed(4)}`, m.cost.toFixed(4), pct(m.recall)])}
-              highlight={1}
+              highlight={2}
             />
             <p className="mt-3 text-[12.5px] text-muted">
-              XGBoost has a slightly higher ROC-AUC, but LightGBM had the lowest cost on validation, and cost is the selection criterion.
+              The tree families overlap within their bootstrap intervals. LightGBM had the lowest validation cost, which is the selection rule; CatBoost was compared but is not a deployable dependency.
             </p>
           </ChartCard>
           <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
@@ -60,7 +60,7 @@ export function ProjectResults({ slug }: { slug: string }) {
             >
               <BarList data={creditShap} format={(v) => v.toFixed(3)} />
             </ChartCard>
-            <ChartCard title="Load test" subtitle="Locust, 20 users, 60 s, API in Docker on a CI runner · 5,543 requests, 0 failures" source="results/loadtest.md">
+            <ChartCard title="Load test" subtitle="Locust, 20 users, 60 s, API in Docker on a CI runner · 7,023 requests, 0 failures" source="results/loadtest.md">
               <Table head={["Endpoint", "RPS", "p50", "p95", "p99"]} rows={creditLoad.map((l) => [l.endpoint, l.rps, `${l.p50} ms`, `${l.p95} ms`, `${l.p99} ms`])} />
             </ChartCard>
           </div>
@@ -129,6 +129,17 @@ export function ProjectResults({ slug }: { slug: string }) {
       return (
         <div className="grid gap-6 [&>*]:min-w-0">
           <ChartCard
+            title="Retrieval strategies vs BM25"
+            subtitle="Chunk nDCG@10 on the test split (130 answerable questions); every strategy tuned on dev only"
+            source="results/benchmark/strategies.csv"
+            table={{ head: ["Strategy", "nDCG@10"], rows: rbiStrategies.map((d) => [d.label, d.value.toFixed(3)]) }}
+          >
+            <BarList data={rbiStrategies} format={(v) => v.toFixed(3)} max={0.8} />
+            <p className="mt-4 text-[12.5px] text-muted">
+              Paired randomisation tests with Holm correction: the original RRF hybrid + rerank is 0.172 below BM25 (p = 0.002), and no strategy beats BM25 significantly. The served profile ranks with BM25 and uses the cross-encoder only to decide whether to answer.
+            </p>
+          </ChartCard>
+          <ChartCard
             title="The 36-configuration retrieval ablation"
             subtitle="Chunk-level nDCG@10 on the test split: 130 answerable questions from notifications never used for tuning"
             source="results/retrieval_ablation.csv"
@@ -152,7 +163,7 @@ export function ProjectResults({ slug }: { slug: string }) {
               rows={rbiGeneration.map((g) => [g.label, String(g.n), g.faithJudge.toFixed(2), g.faithNli.toFixed(2), g.relevance.toFixed(2), `${g.refusalP.toFixed(2)} / ${g.refusalR.toFixed(2)}`])}
             />
             <p className="mt-3 text-[12.5px] text-muted">
-              The two faithfulness checks disagree sharply, and both are reported. The test set is model-generated with 50 pairs AI-reviewed and none human-verified yet.
+              The NLI check is low mainly because the NLI model truncates passages at 512 tokens (86% are longer); checking each claim against passage windows gives 0.70–0.73. The test set is model-generated with 50 pairs AI-reviewed and none human-verified yet.
             </p>
           </ChartCard>
         </div>
