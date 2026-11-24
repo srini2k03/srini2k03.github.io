@@ -92,13 +92,13 @@ export const projects: Project[] = [
     highlights: [
       "Built a RAG system over 2,000+ RBI notifications: BM25 and dense retrieval (BGE embeddings in Qdrant) merged with Reciprocal Rank Fusion, then cross-encoder reranking, with numbered source citations in every answer.",
       "Added a calibrated confidence gate (threshold tuned for refusal F0.5 on a document-level split), so the system says “I don't know” instead of hallucinating on out-of-scope questions.",
-      "Ran a 36-configuration retrieval ablation (4 modes × 3 chunkers × 3 chunk sizes) on 155 test questions from 130 held-out documents. Plain BM25 beat hybrid + rerank (document Recall@5 0.85 vs 0.82; best chunk nDCG@10 0.70), and the README reports that instead of the expected winner.",
+      "Ran a 36-configuration retrieval ablation (4 modes × 3 chunkers × 3 chunk sizes) on a document-disjoint test split (130 answerable questions). Plain BM25 beat hybrid + rerank (document Recall@5 0.85 vs 0.82; best chunk nDCG@10 0.70), and the README reports that instead of the expected winner.",
       "Judged every generated answer with a local Qwen2.5-7B (sharded across parallel GitHub Actions runners) plus an NLI cross-check: faithfulness 0.95 for a local Qwen2.5-3B (n = 155) and 0.99 for GPT-OSS-20B via Groq (n = 60); the refusal gate reached 0.91 precision and 0.84 recall on unanswerable questions.",
       "Shipped the same retrieval stack to the browser: BM25, BGE and the MiniLM reranker run client-side with transformers.js over an int8-quantised index.",
     ],
     metrics: [
       { value: 2153, label: "RBI notifications indexed", context: "29,655 passages, 1997–2025" },
-      { value: 0.70, decimals: 2, label: "Best chunk nDCG@10", context: "BM25, 512-token chunks · doc Recall@5 0.85 · n = 155 test questions" },
+      { value: 0.70, decimals: 2, label: "Best chunk nDCG@10", context: "BM25, 512-token chunks · doc Recall@5 0.85 · 130 test questions" },
       { value: 0.95, decimals: 2, label: "Answer faithfulness", context: "local Qwen2.5-3B, judged by Qwen2.5-7B, n = 155" },
       { value: 0.91, decimals: 2, label: "Refusal precision", context: "“I don't know” gate · recall 0.84" },
     ],

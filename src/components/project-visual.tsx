@@ -130,12 +130,18 @@ function JsonExtract() {
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   const reduced = useReducedMotion();
   const [n, setN] = useState(0);
+  // The first render must match the pre-rendered HTML (no motion preference at build time),
+  // so the reduced-motion case is applied in an effect rather than during render.
   useEffect(() => {
-    if (!inView || reduced) return;
+    if (reduced) {
+      const id = requestAnimationFrame(() => setN(JSON_OUT.length));
+      return () => cancelAnimationFrame(id);
+    }
+    if (!inView) return;
     const id = setInterval(() => setN((c) => (c >= JSON_OUT.length ? c : c + 3)), 16);
     return () => clearInterval(id);
   }, [inView, reduced]);
-  const len = reduced ? JSON_OUT.length : n;
+  const len = n;
   const shown = JSON_OUT.slice(0, len);
   return (
     <Frame caption="Example input and the target output the model is trained to produce (from the README). Not a model prediction.">

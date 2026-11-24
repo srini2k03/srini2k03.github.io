@@ -1,6 +1,6 @@
 "use client";
 
-import { abaloneCv, creditLoad, creditModels, creditShap, jobpostFields, olistDelay, olistPeeking, olistSegments } from "@/content/charts";
+import { abaloneCv, creditLoad, creditModels, creditShap, jobpostApproaches, olistDelay, olistPeeking, olistSegments, rbiAblation, rbiGeneration } from "@/content/charts";
 import { AblationGrid, BarList, ChartCard, LogLine, PairedBars } from "./charts";
 import { DecisionLab } from "./decision-lab";
 
@@ -102,14 +102,14 @@ export function ProjectResults({ slug }: { slug: string }) {
       return (
         <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
           <ChartCard
-            title="The bar to beat: regex baseline"
-            subtitle="Field-level exact match on test_synth (n = 471); fields not shown score 100.0"
-            source="results/metrics/regex_baseline__test_synth.json"
-            table={{ head: ["Field", "Exact match"], rows: jobpostFields.map((f) => [f.label, f.value]) }}
+            title="Micro-F1 by approach"
+            subtitle="Qwen2.5-Instruct base models vs the LoRA fine-tune, on the synthetic test split (n = 471; API and grammar rows on a fixed 200-post subset)"
+            source="results/results_table.md"
+            table={{ head: ["Approach", "Micro-F1 %", "Hallucinated fields %", "n"], rows: jobpostApproaches.map((a) => [a.label, a.f1, a.halluc, a.n]) }}
           >
-            <BarList data={jobpostFields} format={(v) => v.toFixed(1)} max={100} />
+            <BarList data={jobpostApproaches.map((a) => ({ label: a.label, value: a.f1, baseline: !a.ours }))} format={(v) => v.toFixed(1)} max={100} />
             <p className="mt-3 text-[12.5px] text-muted">
-              Micro-F1 93.1 [92.5, 93.8], macro-F1 90.8, hallucination rate 2.5%. Company and role are where rules break down, which is where a fine-tuned model has to win.
+              Hallucinated fields (filled in when they should be null): base 0.5B 67.1%, regex 2.5%, LoRA 1.9%, GPT-OSS-120B 1.0%. The fine-tune wins on F1; the 120B model still guesses slightly less. All numbers are on synthetic posts, not real ones.
             </p>
           </ChartCard>
           <ChartCard title="Dataset, by construction" subtitle="Splits are disjoint by template family and company" source="data/processed/stats.json">
@@ -127,16 +127,35 @@ export function ProjectResults({ slug }: { slug: string }) {
       );
     case "rbi-rag":
       return (
-        <ChartCard
-          title="The 36-configuration retrieval ablation"
-          subtitle="4 retrieval modes × 3 chunkers × 3 chunk sizes, each scored on Recall@k, MRR and nDCG with bootstrap CIs"
-          source="eval/ablate.py · .github/workflows/evaluate.yml"
-        >
-          <AblationGrid />
-          <p className="mt-4 text-[12.5px] text-muted">
-            Dashed cells are scheduled runs. They fill in when the daily evaluation workflow commits results; no numbers are shown until then.
-          </p>
-        </ChartCard>
+        <div className="grid gap-6 [&>*]:min-w-0">
+          <ChartCard
+            title="The 36-configuration retrieval ablation"
+            subtitle="Chunk-level nDCG@10 on the test split: 130 answerable questions from notifications never used for tuning"
+            source="results/retrieval_ablation.csv"
+            table={{
+              head: ["Mode", "Chunker", "Size", "nDCG@10", "Doc Recall@5"],
+              rows: rbiAblation.map((d) => [d.mode, d.chunker, d.size, d.ndcg10, d.docRecall5]),
+            }}
+          >
+            <AblationGrid data={rbiAblation} />
+            <p className="mt-4 text-[12.5px] text-muted">
+              Plain BM25 on 512-token fixed chunks scored best (0.70). Dense retrieval alone was weakest everywhere, and adding the cross-encoder reranker did not beat BM25 on this corpus, whose questions reuse the exact regulatory wording.
+            </p>
+          </ChartCard>
+          <ChartCard
+            title="Answer quality"
+            subtitle="Best retrieval configuration; answers judged by a local Qwen2.5-7B, with an NLI model as a second, stricter check"
+            source="results/generation.md"
+          >
+            <Table
+              head={["Generator · retrieval", "n", "Faithful (judge)", "Faithful (NLI)", "Relevance", "Refusal P / R"]}
+              rows={rbiGeneration.map((g) => [g.label, String(g.n), g.faithJudge.toFixed(2), g.faithNli.toFixed(2), g.relevance.toFixed(2), `${g.refusalP.toFixed(2)} / ${g.refusalR.toFixed(2)}`])}
+            />
+            <p className="mt-3 text-[12.5px] text-muted">
+              The two faithfulness checks disagree sharply, and both are reported. The test set is model-generated with 50 pairs AI-reviewed and none human-verified yet.
+            </p>
+          </ChartCard>
+        </div>
       );
     case "abalone-regression":
       return (

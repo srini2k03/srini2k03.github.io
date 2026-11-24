@@ -3,6 +3,7 @@
  * credit-default-mlops/results/metrics.md, results/figures/shap_importance.csv
  * olist-ecommerce-analytics/results/sql/04_delivery_delay_vs_review.csv, results/metrics/{stats,segments}.json
  * abalone-age-regression/README.md (CV table)
+ * rbi-circulars-rag/results/{retrieval_ablation.csv,generation.md}, jobpost-extractor-qlora/results/results_table.md
  */
 
 export const creditRules = [
@@ -76,9 +77,65 @@ export const abaloneCv = [
   { label: "Mean baseline", value: 0.2869, baseline: true },
 ];
 
-export const jobpostFields = [
-  { label: "skills", value: 99.4 },
-  { label: "seniority", value: 79.2 },
-  { label: "role", value: 75.4 },
-  { label: "company", value: 48.2 },
-];
+
+/**
+ * rbi-circulars-rag/results/retrieval_ablation.csv: test split, 130 answerable questions from
+ * document-disjoint notifications. ndcg10 = chunk-level nDCG@10, docRecall5 = document Recall@5.
+ */
+export const rbiAblation = [
+  { chunker: "fixed", size: 256, mode: "bm25", ndcg10: 0.654, docRecall5: 0.831 },
+  { chunker: "fixed", size: 256, mode: "dense", ndcg10: 0.457, docRecall5: 0.769 },
+  { chunker: "fixed", size: 256, mode: "hybrid", ndcg10: 0.579, docRecall5: 0.846 },
+  { chunker: "fixed", size: 256, mode: "hybrid_rerank", ndcg10: 0.56, docRecall5: 0.8 },
+  { chunker: "fixed", size: 512, mode: "bm25", ndcg10: 0.703, docRecall5: 0.846 },
+  { chunker: "fixed", size: 512, mode: "dense", ndcg10: 0.487, docRecall5: 0.7 },
+  { chunker: "fixed", size: 512, mode: "hybrid", ndcg10: 0.623, docRecall5: 0.823 },
+  { chunker: "fixed", size: 512, mode: "hybrid_rerank", ndcg10: 0.584, docRecall5: 0.815 },
+  { chunker: "fixed", size: 1024, mode: "bm25", ndcg10: 0.697, docRecall5: 0.846 },
+  { chunker: "fixed", size: 1024, mode: "dense", ndcg10: 0.481, docRecall5: 0.738 },
+  { chunker: "fixed", size: 1024, mode: "hybrid", ndcg10: 0.582, docRecall5: 0.8 },
+  { chunker: "fixed", size: 1024, mode: "hybrid_rerank", ndcg10: 0.525, docRecall5: 0.738 },
+  { chunker: "section", size: 256, mode: "bm25", ndcg10: 0.601, docRecall5: 0.831 },
+  { chunker: "section", size: 256, mode: "dense", ndcg10: 0.567, docRecall5: 0.831 },
+  { chunker: "section", size: 256, mode: "hybrid", ndcg10: 0.623, docRecall5: 0.831 },
+  { chunker: "section", size: 256, mode: "hybrid_rerank", ndcg10: 0.576, docRecall5: 0.854 },
+  { chunker: "section", size: 512, mode: "bm25", ndcg10: 0.641, docRecall5: 0.815 },
+  { chunker: "section", size: 512, mode: "dense", ndcg10: 0.57, docRecall5: 0.831 },
+  { chunker: "section", size: 512, mode: "hybrid", ndcg10: 0.632, docRecall5: 0.854 },
+  { chunker: "section", size: 512, mode: "hybrid_rerank", ndcg10: 0.617, docRecall5: 0.862 },
+  { chunker: "section", size: 1024, mode: "bm25", ndcg10: 0.654, docRecall5: 0.831 },
+  { chunker: "section", size: 1024, mode: "dense", ndcg10: 0.539, docRecall5: 0.769 },
+  { chunker: "section", size: 1024, mode: "hybrid", ndcg10: 0.612, docRecall5: 0.831 },
+  { chunker: "section", size: 1024, mode: "hybrid_rerank", ndcg10: 0.625, docRecall5: 0.823 },
+  { chunker: "semantic", size: 256, mode: "bm25", ndcg10: 0.648, docRecall5: 0.831 },
+  { chunker: "semantic", size: 256, mode: "dense", ndcg10: 0.535, docRecall5: 0.785 },
+  { chunker: "semantic", size: 256, mode: "hybrid", ndcg10: 0.637, docRecall5: 0.846 },
+  { chunker: "semantic", size: 256, mode: "hybrid_rerank", ndcg10: 0.595, docRecall5: 0.823 },
+  { chunker: "semantic", size: 512, mode: "bm25", ndcg10: 0.666, docRecall5: 0.815 },
+  { chunker: "semantic", size: 512, mode: "dense", ndcg10: 0.535, docRecall5: 0.777 },
+  { chunker: "semantic", size: 512, mode: "hybrid", ndcg10: 0.636, docRecall5: 0.862 },
+  { chunker: "semantic", size: 512, mode: "hybrid_rerank", ndcg10: 0.611, docRecall5: 0.831 },
+  { chunker: "semantic", size: 1024, mode: "bm25", ndcg10: 0.679, docRecall5: 0.869 },
+  { chunker: "semantic", size: 1024, mode: "dense", ndcg10: 0.517, docRecall5: 0.769 },
+  { chunker: "semantic", size: 1024, mode: "hybrid", ndcg10: 0.625, docRecall5: 0.854 },
+  { chunker: "semantic", size: 1024, mode: "hybrid_rerank", ndcg10: 0.572, docRecall5: 0.777 },
+] as const;
+
+/** rbi-circulars-rag/results/generation.md: answers judged by a local Qwen2.5-7B; NLI = DeBERTa-v3 entailment. */
+export const rbiGeneration = [
+  { label: "Qwen2.5-3B (local), BM25", n: 155, faithJudge: 0.953, faithNli: 0.212, relevance: 0.941, refusalP: 0.913, refusalR: 0.84 },
+  { label: "GPT-OSS-20B (Groq), BM25", n: 60, faithJudge: 0.986, faithNli: 0.131, relevance: 0.977, refusalP: 0.615, refusalR: 0.8 },
+  { label: "Qwen2.5-3B (local), hybrid", n: 60, faithJudge: 0.891, faithNli: 0.289, relevance: 0.851, refusalP: 0.75, refusalR: 0.9 },
+  { label: "Qwen2.5-3B (local), hybrid + rerank", n: 60, faithJudge: 0.918, faithNli: 0.29, relevance: 0.897, refusalP: 0.714, refusalR: 1.0 },
+] as const;
+
+/** jobpost-extractor-qlora/results/results_table.md: test_synth (471 posts; API and guided rows use a fixed 200-post subset). */
+export const jobpostApproaches = [
+  { label: "0.5B zero-shot", f1: 71.6, halluc: 67.1, n: 471, ours: false },
+  { label: "0.5B 3-shot + grammar", f1: 80.1, halluc: 44.2, n: 200, ours: false },
+  { label: "1.5B zero-shot", f1: 91.4, halluc: 35.3, n: 471, ours: false },
+  { label: "Regex rules", f1: 93.1, halluc: 2.5, n: 471, ours: false },
+  { label: "GPT-OSS-120B 3-shot", f1: 97.9, halluc: 1.0, n: 200, ours: false },
+  { label: "LoRA 0.5B 4-bit", f1: 99.0, halluc: 2.0, n: 471, ours: true },
+  { label: "LoRA 0.5B F16", f1: 99.3, halluc: 1.9, n: 471, ours: true },
+] as const;

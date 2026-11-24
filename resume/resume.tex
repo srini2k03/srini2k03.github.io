@@ -115,7 +115,7 @@
       \resumeItemListStart
         \resumeItem{Built a RAG system over 2,153 Reserve Bank of India notifications (29,655 passages): BM25 + dense retrieval (BGE embeddings in Qdrant) merged with Reciprocal Rank Fusion, then cross-encoder reranking, with numbered source citations in every answer.}
         \resumeItem{Added a calibrated confidence gate (threshold tuned on a document-level dev split) so the system answers ``I don't know'' instead of hallucinating; it reached 0.91 precision and 0.84 recall on unanswerable questions.}
-        \resumeItem{Ran a 36-config retrieval ablation on 155 held-out test questions: BM25 alone beat hybrid + rerank (document Recall@5 0.85 vs 0.82, nDCG@10 0.70); generated answers scored 0.95 faithfulness (LLM judge with an NLI cross-check, bootstrap CIs).}
+        \resumeItem{Ran a 36-config retrieval ablation on a held-out, document-split test set: BM25 alone beat hybrid + rerank (document Recall@5 0.85 vs 0.82, nDCG@10 0.70); generated answers scored 0.95 faithfulness (LLM judge with an NLI cross-check, bootstrap CIs).}
       \resumeItemListEnd
 
     \resumeProjectHeading

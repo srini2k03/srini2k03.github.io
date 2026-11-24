@@ -249,14 +249,27 @@ export function LogLine({
   );
 }
 
-/** Grid of N cells that fill in sequence: used to show the 36-config ablation design. */
-export function AblationGrid() {
-  const modes = ["bm25", "dense", "hybrid", "hybrid+rerank"];
+/** Heatmap of the 36-config retrieval ablation: one cell per (mode, chunker, size), shaded by nDCG@10. */
+export function AblationGrid({
+  data,
+}: {
+  data: readonly { chunker: string; size: number; mode: string; ndcg10: number; docRecall5: number }[];
+}) {
+  const modes = [
+    { key: "bm25", label: "bm25" },
+    { key: "dense", label: "dense" },
+    { key: "hybrid", label: "hybrid" },
+    { key: "hybrid_rerank", label: "hybrid+rerank" },
+  ];
   const chunkers = ["fixed", "semantic", "section"];
   const sizes = [256, 512, 1024];
+  const values = data.map((d) => d.ndcg10);
+  const lo = Math.min(...values);
+  const hi = Math.max(...values);
+  const cell = (m: string, c: string, s: number) => data.find((d) => d.mode === m && d.chunker === c && d.size === s);
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[420px] border-separate border-spacing-[3px] text-[11px]">
+      <table className="w-full min-w-[460px] border-separate border-spacing-[3px] text-[11px]">
         <thead>
           <tr>
             <th />
@@ -279,21 +292,28 @@ export function AblationGrid() {
         </thead>
         <tbody>
           {modes.map((m, mi) => (
-            <tr key={m}>
-              <th className="whitespace-nowrap pr-2 text-right font-mono font-normal text-fg-soft">{m}</th>
+            <tr key={m.key}>
+              <th className="whitespace-nowrap pr-2 text-right font-mono font-normal text-fg-soft">{m.label}</th>
               {chunkers.flatMap((c, ci) =>
                 sizes.map((s, si) => {
+                  const d = cell(m.key, c, s);
                   const i = mi * 9 + ci * 3 + si;
+                  if (!d) return <td key={`${c}${s}`} />;
+                  const t = hi > lo ? (d.ndcg10 - lo) / (hi - lo) : 1;
+                  const best = d.ndcg10 === hi;
                   return (
                     <td key={`${c}${s}`} className="p-0">
                       <motion.span
-                        initial={{ opacity: 0, scale: 0.4 }}
+                        initial={{ opacity: 0, scale: 0.6 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: i * 0.025, type: "spring", stiffness: 400, damping: 22 }}
-                        className="block h-7 rounded-[4px] border border-dashed border-line-strong bg-surface"
-                        title={`${m} · ${c} · ${s} tokens: scheduled, result pending`}
-                      />
+                        transition={{ delay: i * 0.02, type: "spring", stiffness: 400, damping: 24 }}
+                        className={`flex h-7 items-center justify-center rounded-[4px] font-mono text-[10px] tabular ${best ? "font-semibold text-fg ring-2 ring-[var(--accent)]" : "text-fg-soft"}`}
+                        style={{ background: `color-mix(in oklab, var(--series-1) ${Math.round(12 + t * 70)}%, transparent)` }}
+                        title={`${m.label} · ${c} · ${s} tokens: nDCG@10 ${d.ndcg10.toFixed(3)}, doc Recall@5 ${d.docRecall5.toFixed(3)}`}
+                      >
+                        {d.ndcg10.toFixed(2)}
+                      </motion.span>
                     </td>
                   );
                 }),
