@@ -3,6 +3,6 @@
       {\href{https://github.com/srini2k03/credit-default-mlops}{\links{Code}} $|$ \href{https://credit-default-api-fkqg.onrender.com/docs}{\links{API}} $|$ \href{https://srini2k03.github.io/credit-default-mlops/}{\links{Site}} $|$ 2026}
       \resumeItemListStart
         \resumeItem{Compared five model families (LogReg, random forest, XGBoost, LightGBM, CatBoost) on 30,000 credit-card customers; the Platt-calibrated LightGBM champion scored ROC-AUC 0.781 and PR-AUC 0.559 on a 6,000-customer holdout.}
-        \resumeItem{Built a configurable cost-sensitive decision engine (5:1 miss-to-false-alarm cost) that cut expected cost per applicant by 25.9\% vs a 0.5 cutoff and raised default recall from 35\% to 78\%.}
+        \resumeItem{Built a cost-sensitive decision engine (5:1 costs): expected cost per applicant $-$25.9\% vs a 0.5 cutoff, default recall 35\% $\rightarrow$ 78\%.}
         \resumeItem{Shipped champion/challenger governance (12-check promotion gate, rollback, drift policies that block or retrain) with MLflow, DVC and SHAP, plus a FastAPI service auto-deployed to Render whose NumPy scoring path raised throughput from 103 to 330 req/s.}
       \resumeItemListEnd

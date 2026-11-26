@@ -4,8 +4,23 @@ import { Reveal } from "./motion-primitives";
 const facts = [
   { k: "Focus", v: "Retrieval & LLM systems, MLOps, applied statistics" },
   { k: "Education", v: `B.E. Information Science, ${profile.education.school} · ${profile.education.grade}` },
-  { k: "Experience", v: "Software Intern (AI/ML), AIMPLIFY · 2024" },
+  { k: "Experience", v: "Independent ML engineering, open-source projects · 2025–present; Software Intern (AI/ML), AIMPLIFY · 2024" },
   { k: "Based in", v: profile.location },
+  {
+    k: "Open source",
+    v: (
+      <>
+        <a className="text-accent underline-offset-2 hover:underline" href="https://github.com/dorianbrown/rank_bm25/pull/66" target="_blank" rel="noopener noreferrer">
+          rank_bm25 PR #66
+        </a>{" "}
+        (9–26× faster BM25 scoring, identical results; under review) ·{" "}
+        <a className="text-accent underline-offset-2 hover:underline" href="https://github.com/whitphx/stlite/issues/2187" target="_blank" rel="noopener noreferrer">
+          stlite issue #2187
+        </a>{" "}
+        (bug report with a live repro)
+      </>
+    ),
+  },
   { k: "Now", v: "Open to full-time roles; next up: human-verifying the RAG test set and the real job-post labels" },
 ];
 
