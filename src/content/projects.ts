@@ -255,7 +255,7 @@ export const projects: Project[] = [
       { label: "Dashboard live (in-browser)", tone: "live" },
       { label: "Results committed", tone: "info" },
     ],
-    skills: ["Python", "SQL", "DuckDB", "PostgreSQL", "Streamlit", "A/B Testing", "Statistical Inference", "pandas", "NumPy", "Scikit-Learn", "LightGBM", "SHAP", "GitHub Actions (CI/CD)", "Pytest"],
+    skills: ["Python", "SQL", "DuckDB", "PostgreSQL", "BigQuery", "Streamlit", "A/B Testing", "Statistical Inference", "pandas", "NumPy", "Scikit-Learn", "LightGBM", "SHAP", "GitHub Actions (CI/CD)", "Pytest"],
     links: [
       { label: "Code", href: "https://github.com/srini2k03/olist-ecommerce-analytics", kind: "code" },
       { label: "Dashboard", href: "https://srini2k03.github.io/olist-ecommerce-analytics/app/", kind: "demo", note: "Streamlit compiled to WebAssembly; the first load takes 10–30 s" },
@@ -265,7 +265,7 @@ export const projects: Project[] = [
     pipeline: [
       { name: "Fetch", detail: "Kaggle API with a pinned GitHub fallback; every file checked by SHA-256" },
       { name: "Validate", detail: "75 data-quality and referential-integrity checks across raw, staging and marts; the pipeline stops on any error" },
-      { name: "Warehouse", detail: "Raw → 8 staging models → 7 marts; the same SQL builds DuckDB and PostgreSQL, and CI compares the results on the real data" },
+      { name: "Warehouse", detail: "Raw → 8 staging models → 7 marts; the same SQL builds DuckDB and PostgreSQL, and the analytics queries also run on Google BigQuery (sandbox), checked monthly" },
       { name: "26 SQL queries", detail: "Organised by domain (customers, sellers, products, orders, delivery, payments, revenue, reviews) on top of the marts" },
       { name: "Metric layer", detail: "32 metrics defined in YAML; revenue, payment value, freight, GMV and estimated contribution are kept separate" },
       { name: "Statistics & models", detail: "Bootstrap CIs, power, Holm/BH corrections; BG/NBD + Gamma-Gamma CLV; a delivery-delay model validated on later months" },
@@ -273,7 +273,7 @@ export const projects: Project[] = [
       { name: "Dashboard", detail: "10 filterable pages in Streamlit compiled to WebAssembly (stlite), served from GitHub Pages with no backend" },
     ],
     highlights: [
-      "Built a layered DuckDB warehouse (raw → staging → marts) for 99k Olist orders with 75 data-quality and referential-integrity checks and 26 domain SQL queries verified identical on PostgreSQL in CI. The checks caught a zip-code defect that left 24,265 customers without a location (280 after the fix).",
+      "Built a layered DuckDB warehouse (raw → staging → marts) for 99k Olist orders with 75 data-quality and referential-integrity checks and 26 domain SQL queries that return identical results on PostgreSQL and Google BigQuery (sqlglot translation plus 6 hand-written percentile queries). The checks caught a zip-code defect that left 24,265 customers without a location (280 after the fix).",
       "Showed that late deliveries drop the average review from 4.29 to 2.27 stars (6,381 late orders; 95% CI on the gap −2.06 to −1.98), and found an RFM segment holding 12.4% of customers but 38.6% of revenue.",
       "Built a delivery-delay model validated on later months: late-delivery PR-AUC 0.123 vs 0.069 for a lane-history baseline, and delivery-time MAE 5.20 days vs 5.65 (Olist's own promise misses by 14.56). A BG/NBD CLV model predicted 739 repeat purchases against 720 actual on a 6-month holdout.",
       "Simulated a free-shipping test on real 2018 baskets with power planning, an SRM check and bootstrap CIs: contribution would fall by about R$58.5k a month, so the recommendation is not to launch.",
@@ -293,7 +293,7 @@ export const projects: Project[] = [
     ],
     engineering: [
       { label: "Tests", value: "300 tests, including known-answer fixtures, 26 PostgreSQL parity tests, pipeline contracts and Streamlit AppTests" },
-      { label: "CI", value: "4 jobs: lint and test, PostgreSQL parity on the real data, notebooks executed, Playwright smoke test of all 10 dashboard pages" },
+      { label: "CI", value: "4 jobs: lint and test, PostgreSQL parity on the real data, notebooks executed, Playwright smoke test of all 10 dashboard pages; a monthly workflow reloads BigQuery (keyless auth) and checks all 26 queries match DuckDB" },
       { label: "Performance", value: "Warehouse build 3.9 s on DuckDB; two PostgreSQL slow paths cut from 202 s to 0.11 s and from 235 s to 2.4 s" },
       { label: "Deployment", value: "Serverless dashboard: Streamlit in Pyodide (7 MB bundle, first render ~10 s), verified in headless Chromium before publishing" },
     ],

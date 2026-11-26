@@ -25,7 +25,7 @@ export const skillGroups = [
   },
   {
     name: "Data & Analytics",
-    skills: ["pandas", "NumPy", "DuckDB", "PostgreSQL", "MySQL", "MongoDB", "Streamlit", "A/B Testing", "Statistical Inference"],
+    skills: ["pandas", "NumPy", "DuckDB", "PostgreSQL", "BigQuery", "MySQL", "MongoDB", "Streamlit", "A/B Testing", "Statistical Inference"],
   },
 ] as const;
 
