@@ -26,7 +26,7 @@ mount({
 The title renders, with the font stylesheet loaded (as with `streamlit run` and the same config).
 
 ### Actual
-The app never renders. Console (stlite 1.10.0, bundled Streamlit 1.62.0, headless Chromium):
+The app never renders (1.10.0 and 1.12.3). Console on 1.10.0 (bundled Streamlit 1.62.0, headless Chromium):
 
 ```
 TypeError: Cannot read properties of undefined (reading 'add')
@@ -47,5 +47,6 @@ Passing only the family name (`"theme.font": "Inter"`) and loading the styleshee
   - workaround: https://github.com/srini2k03/olist-ecommerce-analytics/blob/main/scripts/build_site.py
     (`streamlit_theme()` strips the URL part)
 
-Environment: @stlite/browser 1.10.0 (Streamlit 1.62.0 wheel), Chromium (Playwright 1.64.1),
-Ubuntu 24.04 GitHub runner.
+Environment: reproduced on @stlite/browser 1.10.0 (Streamlit 1.62.0 wheel; headless Chromium via
+Playwright 1.64.1 on an Ubuntu 24.04 GitHub runner) and on the current release, 1.12.3, in desktop
+Chrome. With the same page and `?url=0` (family name only), the title renders on 1.12.3.
