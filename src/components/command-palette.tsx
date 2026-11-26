@@ -34,6 +34,7 @@ export function CommandPalette() {
     };
     return [
       ...sections.map((s) => ({ id: `s-${s.id}`, group: "Jump to", label: s.label, run: go(s.id) })),
+      { id: "writing", group: "Jump to", label: "Writing", run: () => router.push("/writing/") },
       ...featuredProjects.map((p) => ({ id: `p-${p.slug}`, group: "Case studies", label: p.title, hint: String(p.year), run: () => router.push(`/projects/${p.slug}/`) })),
       { id: "ask", group: "Try", label: "Ask my portfolio (in-browser hybrid retrieval)", run: go("lab") },
       {

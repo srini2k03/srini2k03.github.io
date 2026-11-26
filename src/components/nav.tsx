@@ -94,6 +94,16 @@ export function Nav() {
                 )}
               </li>
             ))}
+            <li className="relative">
+              <Link
+                href="/writing/"
+                className={`relative z-10 block rounded-lg px-3 py-1.5 text-[13px] transition-colors ${
+                  pathname.startsWith("/writing") ? "bg-surface-strong text-fg" : "text-muted hover:text-fg"
+                }`}
+              >
+                Writing
+              </Link>
+            </li>
           </ul>
 
           <div className="ml-auto flex items-center gap-1 md:ml-0">
@@ -161,6 +171,11 @@ export function Nav() {
                   </Link>
                 </motion.li>
               ))}
+              <motion.li initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: sections.length * 0.03 }}>
+                <Link href="/writing/" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-base text-fg hover:bg-surface-strong">
+                  Writing
+                </Link>
+              </motion.li>
               <li className="mt-1 border-t border-line pt-2">
                 <a href={resumePdf} className="flex items-center gap-2 rounded-xl px-4 py-3 text-base font-medium text-accent">
                   <FileText /> Download résumé (PDF)

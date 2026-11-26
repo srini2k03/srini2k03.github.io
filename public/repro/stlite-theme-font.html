@@ -1,0 +1,47 @@
+<!doctype html>
+<!--
+  Reproduction for an stlite issue: a theme font given as "Family:URL" (valid in Streamlit's
+  config.toml) stops the app from rendering; the console shows a TypeError in HelmetDispatcher.
+  Query parameters: ?version=1.10.0 (default) or any @stlite/browser version, e.g. ?version=latest
+                    ?url=0 passes only the family name, which renders normally (the workaround).
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>stlite theme font URL repro</title>
+  <link id="stlite-css" rel="stylesheet">
+  <style>
+    body { margin: 0; font: 14px/1.5 system-ui, sans-serif; }
+    #info { padding: 10px 16px; background: #f4f4f4; border-bottom: 1px solid #ddd; }
+    code { background: #e8e8e8; padding: 1px 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div id="info"></div>
+  <div id="root"></div>
+  <script type="module">
+    const params = new URLSearchParams(location.search);
+    const version = params.get("version") || "1.10.0";
+    const useUrl = params.get("url") !== "0";
+    const font = useUrl
+      ? "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap"
+      : "Inter";
+    document.getElementById("info").innerHTML =
+      `@stlite/browser <code>${version}</code> · <code>theme.font = "${font}"</code> · ` +
+      `expected: a title "Hello from stlite" below · open DevTools &gt; Console`;
+    document.getElementById("stlite-css").href =
+      `https://cdn.jsdelivr.net/npm/@stlite/browser@${version}/build/stlite.css`;
+    const { mount } = await import(`https://cdn.jsdelivr.net/npm/@stlite/browser@${version}/build/stlite.js`);
+    mount(
+      {
+        entrypoint: "app.py",
+        files: { "app.py": 'import streamlit as st\nst.title("Hello from stlite")\n' },
+        streamlitConfig: { "theme.font": font },
+      },
+      document.getElementById("root"),
+    );
+  </script>
+</body>
+</html>
