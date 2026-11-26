@@ -92,7 +92,7 @@ export const projects: Project[] = [
     highlights: [
       "Benchmarked 17 retrieval strategy families (108 configurations) for a RAG system over 2,153 RBI notifications, tuned on a dev split and reported on a document-disjoint test split (130 answerable questions) with paired randomisation tests. The original RRF hybrid + cross-encoder reranking scored 0.172 nDCG@10 below plain BM25 (Holm p = 0.002), and no deployable strategy beat BM25 significantly.",
       "Redeployed on the evidence: BM25 ranking with the cross-encoder as an abstention gate (AUROC 0.952 on unanswerable test questions), in both the FastAPI service and the in-browser demo (transformers.js).",
-      "Explained a 0.95 vs 0.19 LLM-judge vs NLI faithfulness gap: 86% of passages exceeded the NLI model's 512-token input, and claim-level checks against passage windows raise NLI faithfulness to 0.70–0.73 (195 answers). Built a claim-level citation verifier on that finding.",
+      "Explained a 0.97 vs 0.19 LLM-judge vs NLI faithfulness gap on the same 195 answers: 86% of passages exceeded the NLI model's 512-token input, and claim-level checks against passage windows raise NLI faithfulness to 0.70–0.73. Built a claim-level citation verifier on that finding.",
       "Built a regulatory relation graph from 9,183 cross-references (2,671 resolved, the rest marked unknown) with 94% precision on an AI-checked sample (49/52); graph-expanded context raised both-documents-in-context from 30% to 65% on multi-document questions, and follow-up rewriting raised document Recall@5 from 0.60 to 0.95.",
     ],
     metrics: [
@@ -104,7 +104,7 @@ export const projects: Project[] = [
     decisions: [
       { title: "Benchmark before believing", body: "RRF, weighted z-score fusion, RM3, parent-child context and reranking were each tuned on dev and tested against BM25 with paired randomisation tests and Holm correction. Plain BM25 held up on exact regulatory wording, so the served profile follows the evidence." },
       { title: "Reranker as a gate, not a ranker", body: "The cross-encoder hurt ranking but is excellent at telling answerable from unanswerable questions (AUROC 0.952), so it decides whether to answer instead of reordering results." },
-      { title: "Find out why two checks disagree", body: "The LLM judge said 0.95 and NLI said 0.19. The NLI model truncates at 512 tokens and 86% of passages are longer; checking each claim against passage windows gives 0.70–0.73, and the verifier is built on that." },
+      { title: "Find out why two checks disagree", body: "On the same 195 answers the LLM judge said 0.97 and NLI said 0.19. The NLI model truncates at 512 tokens and 86% of passages are longer; checking each claim against passage windows gives 0.70–0.73, and the verifier is built on that." },
       { title: "Latest in the corpus is not “in force”", body: "The relation graph reports the latest version in the indexed corpus and says so; references it cannot resolve stay unknown instead of being guessed." },
       { title: "Document-level splits", body: "Dev and test questions come from disjoint documents (seeded SHA-256 split), so thresholds are never tuned on the circulars they are scored on." },
       { title: "Honest test-set provenance", body: "Every Q/A pair is labelled as model-generated, AI-reviewed or human-verified, and every result is logged with its commit and CI run." },
