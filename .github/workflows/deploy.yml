@@ -34,22 +34,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Three versions built from the same parts/ files: general ML Engineer, Data Scientist, LLM / AI Engineer.
       - uses: xu-cheng/latex-action@v3
         with:
-          root_file: resume.tex
+          root_file: |
+            resume.tex
+            resume-data-scientist.tex
+            resume-llm-engineer.tex
           working_directory: resume
-      - name: Résumé must fit on one page
+      - name: Every résumé version must fit on one page
         working-directory: resume
         run: |
           command -v pdfinfo > /dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils > /dev/null; }
-          pages=$(pdfinfo resume.pdf | awk '/^Pages:/{print $2}')
-          echo "pages: $pages"
-          pdftotext -layout resume.pdf - | sed 's/\f/\n===== PAGE BREAK =====\n/g'
-          [ "$pages" -eq 1 ] || { echo "::error::The résumé is $pages pages; it must fit on one page."; exit 1; }
+          status=0
+          for f in resume resume-data-scientist resume-llm-engineer; do
+            pages=$(pdfinfo "$f.pdf" | awk '/^Pages:/{print $2}')
+            echo "$f: $pages page(s)"
+            [ "$pages" -eq 1 ] || { echo "::error::$f.pdf is $pages pages; it must fit on one page."; pdftotext -layout "$f.pdf" - | sed 's/\f/\n===== PAGE BREAK =====\n/g'; status=1; }
+          done
+          exit $status
       - uses: actions/upload-artifact@v4
         with:
           name: resume-pdf
-          path: resume/resume.pdf
+          path: resume/resume*.pdf
 
   build:
     name: Static export
@@ -70,8 +77,11 @@ jobs:
         with:
           name: resume-pdf
           path: resume-build
-      - name: Use the freshly compiled résumé
-        run: cp resume-build/resume.pdf public/Srinivasan_Balasubramanian_Resume.pdf
+      - name: Use the freshly compiled résumés
+        run: |
+          cp resume-build/resume.pdf public/Srinivasan_Balasubramanian_Resume.pdf
+          cp resume-build/resume-data-scientist.pdf public/Srinivasan_Balasubramanian_Resume_Data_Scientist.pdf
+          cp resume-build/resume-llm-engineer.pdf public/Srinivasan_Balasubramanian_Resume_LLM_Engineer.pdf
       # Resolved in shell: a user site's base_path is "", which `||` in an expression would treat as missing.
       - name: Resolve base path and site URL
         env:

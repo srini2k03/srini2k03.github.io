@@ -1,80 +1,14 @@
 %-------------------------------------------------------------
-% Srinivasan Balasubramanian - Resume (AI/ML Engineer track)
-% ATS notes: single column, no icons, no tables for content,
-% standard section names, \pdfgentounicode=1 so text extracts cleanly.
+% Srinivasan Balasubramanian - Resume (ML Engineer version)
+% Built from the shared files in parts/ so every version states the same facts;
+% only the summary, the skill order and the project order differ.
 %-------------------------------------------------------------
-\documentclass[letterpaper,10pt]{article}
-
-\usepackage{latexsym}
-\usepackage[empty]{fullpage}
-\usepackage{titlesec}
-\usepackage[usenames,dvipsnames]{color}
-\usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
-\usepackage{fancyhdr}
-\usepackage[english]{babel}
-\usepackage{tabularx}
-\input{glyphtounicode}
-
-\pagestyle{fancy}
-\fancyhf{}
-\fancyfoot{}
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}
-
-\addtolength{\oddsidemargin}{-0.55in}
-\addtolength{\evensidemargin}{-0.55in}
-\addtolength{\textwidth}{1.1in}
-\addtolength{\topmargin}{-.6in}
-\addtolength{\textheight}{1.2in}
-
-\urlstyle{same}
-\raggedbottom
-\raggedright
-\setlength{\tabcolsep}{0in}
-
-\titleformat{\section}{
-  \vspace{-5pt}\scshape\raggedright\large\bfseries
-}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
-
-\pdfgentounicode=1
-
-\newcommand{\resumeItem}[1]{\item\small{{#1 \vspace{-2pt}}}}
-
-\newcommand{\resumeSubheading}[4]{
-  \vspace{-2pt}\item
-    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
-      \textbf{#1} & \textbf{\small #2} \\
-      \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\vspace{-5pt}
-}
-
-\newcommand{\resumeProjectHeading}[2]{
-    \item
-    \begin{tabular*}{1.0\textwidth}{l@{\extracolsep{\fill}}r}
-      \small#1 & \small #2\\
-    \end{tabular*}\vspace{-4pt}
-}
-
-\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in, itemsep=0pt, topsep=1pt]}
-\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-1pt}}
-\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
-\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-
-\setlist[itemize]{label={$\vcenter{\hbox{\tiny$\bullet$}}$}}
-
-\newcommand{\links}[1]{\textbf{#1}}
+\input{parts/preamble}
+\input{parts/skills}
 
 \begin{document}
 
-%----------HEADER----------
-\begin{center}
-    {\Huge \scshape Srinivasan Balasubramanian} \\ \vspace{3pt}
-    \small Bangalore, India $|$ +91 8431358523 $|$
-    \href{mailto:srinivasanb123@gmail.com}{\underline{srinivasanb123@gmail.com}} $|$
-    \href{https://github.com/srini2k03}{\underline{github.com/srini2k03}} $|$
-    \href{https://srini2k03.github.io}{\underline{srini2k03.github.io}}
-\end{center}
+\input{parts/header}
 
 %-----------SUMMARY-----------
 \section{Summary}
@@ -84,91 +18,35 @@
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.15in, label={}]
     \item \small{
-     \textbf{Languages \& Web:} Python, SQL, JavaScript, React, C++, Java, Kotlin; Linux, Git \\
-     \textbf{ML \& Deep Learning:} Scikit-Learn, XGBoost, LightGBM, CatBoost, TensorFlow/Keras, TFLite, OpenCV, Optuna, SHAP \\
-     \textbf{LLMs \& GenAI:} RAG, Hugging Face Transformers, TRL (LoRA), Qdrant, BM25, Cross-Encoder Reranking, Ollama, llama.cpp (GGUF) \\
-     \textbf{MLOps \& Deployment:} MLflow, DVC, Prefect, Evidently, Pandera, Docker, FastAPI, Flask, GitHub Actions (CI/CD), Pytest, Playwright \\
-     \textbf{Evaluation:} nDCG, MRR, Recall@k, calibration (ECE), bootstrap CIs, significance tests, LLM-as-judge, NLI faithfulness \\
-     \textbf{Data \& Analytics:} pandas, NumPy, DuckDB, PostgreSQL, MySQL, MongoDB, Streamlit, A/B Testing, Statistical Inference
+     \skillLang \\
+     \skillML \\
+     \skillLLM \\
+     \skillMLOps \\
+     \skillEval \\
+     \skillData
     }
  \end{itemize}
  \vspace{-14pt}
 
-%-----------EXPERIENCE-----------
-\section{Experience}
-  \resumeSubHeadingListStart
-    \resumeSubheading
-      {AIMPLIFY}{Jul 2024 -- Sep 2024}
-      {Software Intern (AI/ML)}{Bangalore, India}
-      \resumeItemListStart
-        \resumeItem{Built Python data-processing workflows to clean and structure unstructured text corpora for LLM and ML model evaluation.}
-        \resumeItem{Benchmarked baseline LLM prompts; wrote Scikit-Learn cross-validation and error-analysis scripts (Precision, Recall, F1).}
-        \resumeItem{Integrated ML inference outputs into internal application prototypes through Flask REST APIs, working with the software team.}
-      \resumeItemListEnd
-  \resumeSubHeadingListEnd
+\input{parts/experience}
 
 %-----------PROJECTS-----------
 \section{Projects}
   \resumeSubHeadingListStart
 
-    \resumeProjectHeading
-      {\textbf{RBI Regulations Q\&A -- RAG with Verified Citations} $|$ \emph{Python, Qdrant, FastAPI, Docker}}
-      {\href{https://github.com/srini2k03/rbi-circulars-rag}{\links{Code}} $|$ \href{https://srini2k03.github.io/rbi-circulars-rag/}{\links{Live Demo}} $|$ 2026}
-      \resumeItemListStart
-        \resumeItem{Built a RAG system over 2,153 Reserve Bank of India notifications: BM25 + BGE dense retrieval (Qdrant), cross-encoder scoring, claim-level citation verification, and an amendment graph from 9,183 cross-references (94\% sampled precision).}
-        \resumeItem{Benchmarked 108 retrieval configs with paired significance tests: RRF hybrid + rerank scored 0.172 nDCG@10 below BM25 ($p = 0.002$), so I redeployed BM25 ranking with the cross-encoder as an abstention gate (AUROC 0.952).}
-        \resumeItem{Explained a 0.95 vs 0.19 LLM-judge vs NLI faithfulness gap: 86\% of passages exceeded the NLI model's 512-token input, and claim-level checks raised NLI faithfulness to 0.70--0.73 on 195 answers.}
-      \resumeItemListEnd
+    \input{parts/projects/rbi}
 
-    \resumeProjectHeading
-      {\textbf{Credit Default Prediction -- Cost-Sensitive MLOps} $|$ \emph{LightGBM, MLflow, DVC, FastAPI}}
-      {\href{https://github.com/srini2k03/credit-default-mlops}{\links{Code}} $|$ \href{https://credit-default-api-fkqg.onrender.com/docs}{\links{API}} $|$ \href{https://srini2k03.github.io/credit-default-mlops/}{\links{Site}} $|$ 2026}
-      \resumeItemListStart
-        \resumeItem{Compared five model families (LogReg, random forest, XGBoost, LightGBM, CatBoost) on 30,000 credit-card customers; the Platt-calibrated LightGBM champion scored ROC-AUC 0.781 and PR-AUC 0.559 on a 6,000-customer holdout.}
-        \resumeItem{Built a configurable cost-sensitive decision engine (5:1 miss-to-false-alarm cost) that cut expected cost per applicant by 25.9\% vs a 0.5 cutoff and raised default recall from 35\% to 78\%.}
-        \resumeItem{Shipped champion/challenger governance (12-check promotion gate, rollback, drift policies that block or retrain) with MLflow, DVC and SHAP, plus a FastAPI service auto-deployed to Render whose NumPy scoring path raised throughput from 103 to 330 req/s.}
-      \resumeItemListEnd
+    \input{parts/projects/credit}
 
-    \resumeProjectHeading
-      {\textbf{Job-Post to JSON Extractor -- LoRA Fine-Tuned LLM} $|$ \emph{Qwen2.5, HF TRL, llama.cpp}}
-      {\href{https://github.com/srini2k03/jobpost-extractor-qlora}{\links{Code}} $|$ \href{https://srini2k03.github.io/jobpost-extractor-qlora/}{\links{Live Demo}} $|$ 2026}
-      \resumeItemListStart
-        \resumeItem{Fine-tuned Qwen2.5-0.5B-Instruct with LoRA (TRL SFT, completion-only loss) to turn noisy Indian job posts into schema-validated JSON across 11 fields with an evidence span for every value; micro-F1 99.3\% on synthetic posts.}
-        \resumeItem{Built a 130-posting real-world test set from licence-checked sources: the fine-tune scored 56.1\% micro-F1, matching a 6x larger Qwen2.5-3B (56.4\%) with a quarter of its hallucinated fields (7.9\% vs 30.3\%).}
-        \resumeItem{Calibrated field confidence on validation (real-post ECE 0.20 to 0.10, AUROC 0.88) and served a 0.40 GB 4-bit GGUF in-browser via llama.cpp WebAssembly with JSON-grammar decoding.}
-      \resumeItemListEnd
+    \input{parts/projects/jobpost}
 
-    \resumeProjectHeading
-      {\textbf{E-Commerce Analytics, 99K Orders (Olist)} $|$ \emph{SQL, DuckDB, PostgreSQL, Streamlit}}
-      {\href{https://github.com/srini2k03/olist-ecommerce-analytics}{\links{Code}} $|$ \href{https://srini2k03.github.io/olist-ecommerce-analytics/app/}{\links{Dashboard}} $|$ 2026}
-      \resumeItemListStart
-        \resumeItem{Built a layered DuckDB warehouse for 99,441 orders with 75 data-quality checks and 26 domain SQL queries (CTEs, window functions) verified identical on PostgreSQL in CI.}
-        \resumeItem{Showed late deliveries drop average review from 4.29 to 2.27 stars; a delivery-delay model validated on later months reached late-delivery PR-AUC 0.123 vs 0.069 for a baseline.}
-        \resumeItem{Simulated a free-shipping A/B test on real baskets (power, SRM check, bootstrap CIs): contribution would fall about R\$58.5k/month, so recommended against launch; built a 10-page in-browser dashboard.}
-      \resumeItemListEnd
+    \input{parts/projects/olist}
 
-    \resumeProjectHeading
-      {\textbf{Deepfake Detection -- Audio and Face Models} $|$ \emph{TensorFlow, OpenCV, Flask, React}}
-      {\href{https://github.com/srini2k03/multimodal-deepfake-detection}{\links{Code}} $|$ \href{https://srini2k03.github.io/multimodal-deepfake-detection/}{\links{Demo}} $|$ 2025}
-      \resumeItemListStart
-        \resumeItem{Trained a log-mel CNN on ASVspoof 2019 (7.65\% EER on unseen attacks), exposed a silence shortcut, and shipped a silence-trimmed model that holds 27.6\% vs 62.6\% EER at 10 dB SNR, running in-browser.}
-        \resumeItem{Fine-tuned EfficientNetV2-B0 to 0.914 ROC-AUC on identity-disjoint face data, reported a metadata-only 0.967 bias, and served both models via a calibrated Flask API with Grad-CAM.}
-      \resumeItemListEnd
+    \input{parts/projects/deepfake}
 
   \resumeSubHeadingListEnd
-  \vspace{-4pt}
-  \small{\textbf{Other projects:}
-  \href{https://github.com/srini2k03/abalone-age-regression}{\underline{Abalone Age Regression}} (7-model ensemble, RMSLE 0.166, 41.6\% below baseline);
-  \href{https://github.com/srini2k03/traffic-violation-fine-manager}{\underline{Android e-Challan App}} (Kotlin, Jetpack Compose, Firebase, offline sync, CI-built APK);
-  \href{https://github.com/srini2k03/Simple-Chat-Application-Using-Redis}{\underline{Redis Chat Service}} (Spring Boot, Redis, Docker).}
+\input{parts/projects/other}
 
-%-----------EDUCATION-----------
-\section{Education}
-  \resumeSubHeadingListStart
-    \resumeSubheading
-      {BMS College of Engineering}{Dec 2021 -- Jun 2025}
-      {Bachelor of Engineering, Information Science and Engineering -- CGPA 8.5/10}{Bangalore, India}
-  \resumeSubHeadingListEnd
-  \vspace{-6pt}
+\input{parts/education}
 
 \end{document}

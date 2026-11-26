@@ -1,0 +1,8 @@
+    \resumeProjectHeading
+      {\textbf{RBI Regulations Q\&A -- RAG with Verified Citations} $|$ \emph{Python, Qdrant, FastAPI, Docker}}
+      {\href{https://github.com/srini2k03/rbi-circulars-rag}{\links{Code}} $|$ \href{https://srini2k03.github.io/rbi-circulars-rag/}{\links{Live Demo}} $|$ 2026}
+      \resumeItemListStart
+        \resumeItem{Built a RAG system over 2,153 Reserve Bank of India notifications: BM25 + BGE dense retrieval (Qdrant), cross-encoder scoring, claim-level citation verification, and an amendment graph from 9,183 cross-references (94\% sampled precision).}
+        \resumeItem{Benchmarked 108 retrieval configs with paired significance tests: RRF hybrid + rerank scored 0.172 nDCG@10 below BM25 ($p = 0.002$), so I redeployed BM25 ranking with the cross-encoder as an abstention gate (AUROC 0.952).}
+        \resumeItem{Explained a 0.95 vs 0.19 LLM-judge vs NLI faithfulness gap: 86\% of passages exceeded the NLI model's 512-token input, and claim-level checks raised NLI faithfulness to 0.70--0.73 on 195 answers.}
+      \resumeItemListEnd
